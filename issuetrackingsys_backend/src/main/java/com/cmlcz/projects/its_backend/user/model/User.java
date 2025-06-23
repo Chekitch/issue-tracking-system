@@ -25,8 +25,7 @@ public class User extends BaseUuidModel {
     private String hashedPassword;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
     private UserRole role;
-
-
 
 }

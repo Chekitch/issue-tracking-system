@@ -2,7 +2,7 @@ package com.cmlcz.projects.its_backend.user.controller;
 
 import com.cmlcz.projects.its_backend.common.constants.ControllerMessages;
 import com.cmlcz.projects.its_backend.common.dto.ApiResponse;
-import com.cmlcz.projects.its_backend.user.dto.UserRoleRequestDTO;
+import com.cmlcz.projects.its_backend.user.dto.CreateUserRoleRequest;
 import com.cmlcz.projects.its_backend.user.dto.UserRoleResponseDTO;
 import com.cmlcz.projects.its_backend.user.model.UserRole;
 import com.cmlcz.projects.its_backend.user.service.UserRoleService;
@@ -26,17 +26,28 @@ public class UserRoleController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserRoleResponseDTO>> createRole(@RequestBody @Valid UserRoleRequestDTO userRoleRequestDTO){
-        UserRoleResponseDTO userRoleResponseDTO = userRoleService.create(userRoleRequestDTO);
-        ApiResponse<UserRoleResponseDTO> apiResponse = new ApiResponse<>
+    public ResponseEntity<ApiResponse<UserRoleResponseDTO>> createRole(@RequestBody @Valid CreateUserRoleRequest createUserRoleRequest){
+        UserRoleResponseDTO userRoleResponseDTO = userRoleService.create(createUserRoleRequest);
+        ApiResponse<UserRoleResponseDTO> response = new ApiResponse<>
                 (userRoleResponseDTO, ControllerMessages.CREATE_SUCCESS, ControllerMessages.CREATE_SUCCESS_CODE);
 
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserRoleResponseDTO>>> getRoles(){
-        return null;
+    public ResponseEntity<ApiResponse<List<UserRoleResponseDTO>>> getAllRoles(){
+        List<UserRoleResponseDTO> userRoleResponseDTOs = userRoleService.getAllRoles();
+        ApiResponse<List<UserRoleResponseDTO>> response = new ApiResponse<>
+                (userRoleResponseDTOs, ControllerMessages.LIST_SUCCESS, ControllerMessages.LIST_SUCCESS_CODE);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{roleId}/permissions/{permissionId}")
+    public ResponseEntity<ApiResponse<UserRoleResponseDTO>> addPermissionToRole(@PathVariable Long roleId, @PathVariable Long permissionId){
+        UserRoleResponseDTO updatedRole = userRoleService.assignPermission(roleId, permissionId);
+        ApiResponse<UserRoleResponseDTO> response = new ApiResponse<>(updatedRole, ControllerMessages.UPDATE_SUCCESS, ControllerMessages.UPDATE_SUCCESS_CODE);
+        return ResponseEntity.ok(response);
     }
 
 

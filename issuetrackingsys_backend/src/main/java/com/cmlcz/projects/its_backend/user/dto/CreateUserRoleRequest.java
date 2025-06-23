@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class UserRoleRequestDTO {
+public class CreateUserRoleRequest {
 
     @NotBlank(message = "Role must not be blank")
     @Size(min = 3, max = 30, message = "Role must be between 3 and 30 characters")

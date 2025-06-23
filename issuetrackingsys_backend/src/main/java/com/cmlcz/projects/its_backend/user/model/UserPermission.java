@@ -4,12 +4,13 @@ import com.cmlcz.projects.its_backend.common.model.BaseModel;
 import jakarta.persistence.Entity;
 import lombok.*;
 
+import java.util.Set;
+
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 public class UserPermission extends BaseModel {
 
     private String name;

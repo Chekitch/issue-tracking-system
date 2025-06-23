@@ -1,10 +1,9 @@
 package com.cmlcz.projects.its_backend.user.controller;
 
+import com.cmlcz.projects.its_backend.common.constants.ControllerMessages;
 import com.cmlcz.projects.its_backend.common.dto.ApiResponse;
-import com.cmlcz.projects.its_backend.user.dto.UserCreateRequestDTO;
+import com.cmlcz.projects.its_backend.user.dto.CreateUserRequest;
 import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
-import com.cmlcz.projects.its_backend.user.model.User;
-import com.cmlcz.projects.its_backend.user.repository.UserRepository;
 import com.cmlcz.projects.its_backend.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserSummaryDTO>> createUser(@RequestBody @Valid UserCreateRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<UserSummaryDTO>> createUser(@RequestBody @Valid CreateUserRequest requestDTO) {
 
         UserSummaryDTO userSummaryDTO = userService.create(requestDTO);
 
@@ -37,12 +36,19 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> findAll() {
-        return null;
+    public ResponseEntity<ApiResponse<List<UserSummaryDTO>>> getAllUsers(){
+
+        List<UserSummaryDTO> userSummaryDTOS = userService.getAllUsers();
+
+        ApiResponse<List<UserSummaryDTO>> response = new ApiResponse<>(userSummaryDTOS, ControllerMessages.LIST_SUCCESS, ControllerMessages.LIST_SUCCESS_CODE);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public User findById(@PathVariable UUID id){
-        return null;
+    public ResponseEntity<ApiResponse<UserSummaryDTO>> getUserById(@PathVariable UUID id){
+        UserSummaryDTO userSummaryDTO = userService.getUserById(id);
+        ApiResponse<UserSummaryDTO> response = new ApiResponse<>(userSummaryDTO, ControllerMessages.FETCH_SUCCESS, ControllerMessages.FETCH_SUCCESS_CODE);
+        return ResponseEntity.ok(response);
     }
 }

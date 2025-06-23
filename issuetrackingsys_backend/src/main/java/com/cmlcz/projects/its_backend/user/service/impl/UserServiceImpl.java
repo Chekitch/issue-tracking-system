@@ -3,15 +3,15 @@ package com.cmlcz.projects.its_backend.user.service.impl;
 import com.cmlcz.projects.its_backend.common.exception.ResourceNotFoundException;
 import com.cmlcz.projects.its_backend.user.mapper.UserMapper;
 import com.cmlcz.projects.its_backend.user.model.User;
-import com.cmlcz.projects.its_backend.user.dto.UserCreateRequestDTO;
+import com.cmlcz.projects.its_backend.user.dto.CreateUserRequest;
 import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
 import com.cmlcz.projects.its_backend.user.repository.UserRepository;
-import com.cmlcz.projects.its_backend.user.model.UserRole;
 import com.cmlcz.projects.its_backend.user.repository.UserRoleRepository;
 import com.cmlcz.projects.its_backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,26 +38,22 @@ public class UserServiceImpl implements UserService {
         return List.of();
     }
 
-    public User findById(UUID uuid) {
+    @Override
+    @Transactional(readOnly = true)
+    public UserSummaryDTO getUserById(UUID id) {
+        User user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
 
-        User user = userRepository.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + uuid));
-
-        return user;
+        return userMapper.toDTO(user);
     }
 
-    public UserSummaryDTO create(UserCreateRequestDTO userRequestDTO) {
+    @Transactional
+    public UserSummaryDTO create(CreateUserRequest userRequestDTO) {
 
-//        User user = new User();
-//
-//        UserRole userRole = userRoleRepository.findById(userRequestDTO.getRoleId())
-//                .orElseThrow(() -> new ResourceNotFoundException("Role not found with id " + userRequestDTO.getRoleId()));
-//        user.setRole(userRole);
-//
-//        user.setUsername(userRequestDTO.getUsername());
-//        user.setEmail(userRequestDTO.getEmail());
-//        user.setFullName(userRequestDTO.getFullName());
-//
-//        user.setHashedPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        if(!userRoleRepository.existsById(userRequestDTO.getRoleId())){
+            throw new ResourceNotFoundException("There is no role with id : " + userRequestDTO.getRoleId());
+        }
 
         User user = userMapper.toEntity(userRequestDTO, userRoleRepository, passwordEncoder);
 
@@ -67,10 +63,21 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public UserSummaryDTO update(UserCreateRequestDTO userRequestDTO) {
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserSummaryDTO> getAllUsers() {
+        List<User> users = userRepository.findAllWithRoles();
+
+        return userMapper.toDTOs(users);
+
+    }
+
+    @Transactional
+    public UserSummaryDTO update(CreateUserRequest userRequestDTO) {
         return null;
     }
 
+    @Transactional
     public boolean deleteById(UUID uuid) {
         return false;
     }
