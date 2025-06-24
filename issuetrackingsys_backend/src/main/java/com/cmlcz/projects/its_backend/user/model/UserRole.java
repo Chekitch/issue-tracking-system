@@ -16,6 +16,8 @@ import java.util.Set;
 @Table(name = "user_role")
 public class UserRole extends BaseModel {
 
+
+    @Column(nullable = false, unique = true)
     private String role; // ADMIN, PROJECT_MANAGER, DEVELOPER, TESTER, REPORTER
     private String description;
 

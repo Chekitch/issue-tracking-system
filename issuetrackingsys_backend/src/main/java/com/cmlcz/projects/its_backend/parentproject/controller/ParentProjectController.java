@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/parent-projects")
+@RequestMapping("/api/parent-projects")
 public class ParentProjectController extends BaseController<ParentProjectCreateDTO,ParentProjectResponseDTO, UUID>{
 
     private final ParentProjectService parentProjectService;

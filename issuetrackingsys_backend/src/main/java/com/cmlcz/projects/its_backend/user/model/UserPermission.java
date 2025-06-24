@@ -1,6 +1,7 @@
 package com.cmlcz.projects.its_backend.user.model;
 
 import com.cmlcz.projects.its_backend.common.model.BaseModel;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
 
@@ -13,7 +14,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserPermission extends BaseModel {
 
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String name; // CREATE_ISSUE
     private String description;
 
 

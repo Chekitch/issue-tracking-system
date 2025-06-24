@@ -15,13 +15,16 @@ import lombok.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends BaseUuidModel {
 
+    @Column(nullable = false, unique = true)
     private String username;
 
     @JoinColumn(name="full_name")
     private String fullName;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String hashedPassword;
 
     @ManyToOne(fetch = FetchType.LAZY)

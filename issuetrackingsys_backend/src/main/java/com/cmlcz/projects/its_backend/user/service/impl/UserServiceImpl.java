@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     public UserSummaryDTO getUserById(UUID id) {
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         return userMapper.toDTO(user);
     }

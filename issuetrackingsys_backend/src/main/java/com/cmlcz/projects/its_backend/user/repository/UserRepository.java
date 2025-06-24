@@ -5,6 +5,7 @@ import com.cmlcz.projects.its_backend.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,5 +19,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("select u from User u join fetch u.role where u.id = :id")
     Optional<User> findById(UUID id);
+
+    @Query("select u from User u join fetch u.role r join fetch r.permissions where u.username = :username")
+    Optional<User> findByUsernameWithRoleAndPermissions(String username);
 
 }
