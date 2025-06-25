@@ -1,6 +1,6 @@
 import ParentProject from '../ParentProject/ParentProject'
 
-function Dashboard() {
+const Dashboard = () => {
   return (
     <div>
       <ParentProject />

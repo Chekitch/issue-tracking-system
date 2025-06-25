@@ -1,0 +1,35 @@
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.not-found h1 {
+  font-size: 6rem;
+  color: #3f51b5;
+  margin: 0;
+}
+
+.not-found p {
+  font-size: 1.2rem;
+  color: #f3e4e4;
+  margin: 1rem 0 2rem;
+}
+
+.not-found button {
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.not-found button:hover {
+  background-color: #303f9f;
+}

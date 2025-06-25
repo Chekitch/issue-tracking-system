@@ -3,6 +3,8 @@ import type { FormEvent } from 'react';
 import './Login.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { login } from '../../features/auth/authSlice';
 
 
 interface LoginResponse {
@@ -11,8 +13,12 @@ interface LoginResponse {
   roles: string[];
 }
 
-function Login() {
+const Login = () => {
+
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
+
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -27,10 +33,13 @@ function Login() {
       password
     });
 
+    console.log(response.data);
+
     const { token } = response.data;
-    localStorage.setItem('token', token);
+    dispatch(login(token));
 
     navigate('dashboard');
+
 
     } catch (error : any) {
       

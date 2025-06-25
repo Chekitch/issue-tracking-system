@@ -34,7 +34,13 @@
   background-color: #3a1f1f;
   color: #f95959;
   padding: 1rem;
-  border-radius: 6px;
+  border-radius: 5px;
   text-align: center;
   margin-top: 1rem;
+}
+
+.logout-container {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
 }

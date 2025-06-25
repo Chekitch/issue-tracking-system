@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import './ParentProject.css'
 import ParentProjectCard from '../ParentProjectCard/ParentProjectCard';
+import { useAppSelector } from '../../app/hooks';
+import LogoutButton from '../LogoutButton/LogoutButton';
 interface ParentProject{
     id: string,
     projectName: string;
@@ -12,11 +14,12 @@ function ParentProject() {
 
     const [projects, setProjects] = useState<ParentProject[]>([]);
     const [error, setError] = useState<String>('');
+    const token = useAppSelector(state => state.auth.token);
 
     useEffect(() => {
         const fetchParentProjects = async () => {
             try{
-                const token = localStorage.getItem('token');
+                
                 console.log(token);
 
                 if(!token){
@@ -48,7 +51,13 @@ function ParentProject() {
 
   return (
     <div className='projects-container'>
+        
             <h2>Parent Projects</h2>
+
+            <div className='logout-container'>
+                <LogoutButton/>
+            </div>
+            
             {projects.length === 0 ? (
                 <div className="no-projects">
                     <p>No parent projects found</p>
@@ -60,7 +69,8 @@ function ParentProject() {
                     {
 
                     projects.map(project => (
-                        <ParentProjectCard id={project.id}
+                        <ParentProjectCard key={project.id}
+                            id={project.id}
                             projectName={project.projectName}
                             description={project.description}/>
                     ))
