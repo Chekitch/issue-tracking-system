@@ -1,3 +1,17 @@
 body{
     background-color: #233142;
 }
+
+.back-button {
+    background-color: #455D7A;
+    color: #F5F5F5;
+    border: none;
+    border-radius: 5px;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.back-button:hover {
+    background-color: #394c64;
+}

@@ -1,0 +1,132 @@
+.subprojects-container {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.subprojects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.parent-project-info {
+  margin-bottom: 2rem;
+}
+
+.parent-project-info h1 {
+  color: #F5F5F5;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.parent-description {
+  color: #E0E0E0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.subprojects-section h2 {
+  color: #F5F5F5;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #4ECDC4;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.subprojects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+}
+
+.subproject-card {
+  flex: 1 0 300px;
+  max-width: 400px;
+  background-color: #2C3E50;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.subproject-card:hover {
+  transform: translateY(-5px);
+}
+
+.subproject-header h3 {
+  color: #F5F5F5;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.75rem;
+}
+
+.subproject-description {
+  color: #E0E0E0;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.subproject-footer {
+  display: flex;
+  justify-content: end;
+  gap: 1.5rem;
+}
+
+.view-issues-btn {
+  background-color: #b2e2df;
+  color: #233142;
+  border: none;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.view-issues-btn:hover {
+  background-color: #3dbdb5;
+}
+
+.no-subprojects {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  width: 100%;
+}
+
+.no-subprojects p {
+  color: #F5F5F5;
+  margin-bottom: 1.5rem;
+}
+
+.create-subproject-btn {
+  background-color: #F95959;
+  color: #F5F5F5;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.create-subproject-btn:hover {
+  background-color: #e54747;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px;
+  font-size: 1.5rem;
+}
+
+.error {
+  color: #ff7575;
+}

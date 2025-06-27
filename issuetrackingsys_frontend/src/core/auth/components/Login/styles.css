@@ -1,4 +1,4 @@
-.login-container {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,7 +9,10 @@
   background-color: #233142;
 }
 
-.login-form-container {
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background-color: white;
   padding: 2.5rem;
   border-radius: 12px;
@@ -18,25 +21,25 @@
   text-align: center;
 }
 
-.login-form-container h1 {
+.formContainer h1 {
   color: #455d7a;
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
 }
 
-.form-group {
+.inputGroup {
   margin-bottom: 1.2rem;
   text-align: left;
 }
 
-.form-group label {
+.inputGroup label {
   display: block;
   margin-bottom: 0.5rem;
   color: #4e6786;
   font-size: 1rem;
 }
 
-.form-group input {
+.inputGroup input {
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #ddd;
@@ -44,7 +47,7 @@
   font-size: 1rem;
 }
 
-.form-group input:focus {
+.inputGroup input:focus {
   outline: none;
 }
 
@@ -58,34 +61,11 @@ button[type="submit"] {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
   margin-top: 0.5rem;
 }
 
 button[type="submit"]:hover {
   background-color: #e54747;
-}
-
-.register-link {
-  margin-top: 2rem;
-  font-size: 1rem;
-  color: #607a9c;
-}
-
-.register-link a {
-  color: #f95959;
-  text-decoration: none;
-}
-
-.register-link a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 480px) {
-  .login-form-container {
-    padding: 1.5rem;
-    width: 90%;
-  }
 }
 
 .error-message {

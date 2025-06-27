@@ -1,12 +1,19 @@
 
 import './App.css'
-import Login from './components/Login/Login'
 import { Routes, Route } from 'react-router-dom'
-import NotFound from './components/NotFound/NotFound'
-import Dashboard from './components/Dashboard/Dashboard'
 import ProtectedRoutes from './utils/ProtectedRoutes'
+import Login from './core/auth/components/Login/index.tsx'
+import { useAppSelector } from './store/hooks.ts'
+import { setAuthToken } from './core/api/axios-config.ts'
+import SubprojectPage from './features/subprojects/components/SubprojectList/index.tsx'
+import Dashboard from './pages/DashboardPage/index.tsx'
+import NotFound from './pages/NotFoundPage/index.tsx'
 
 function App() {
+
+  const token = useAppSelector((state) => state.auth.token);
+  setAuthToken(token);
+
   return (
     <>
       <Routes>
@@ -14,6 +21,7 @@ function App() {
 
         <Route element={<ProtectedRoutes/>}>
           <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/projects/:projectId/subprojects' element={<SubprojectPage />} />
         </Route>
 
         <Route path='*' element={<NotFound/>} />

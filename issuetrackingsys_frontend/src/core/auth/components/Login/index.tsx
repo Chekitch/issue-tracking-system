@@ -1,16 +1,17 @@
-import React , { useState } from 'react'
+import React , { useEffect, useState } from 'react'
 import type { FormEvent } from 'react';
-import './Login.css'
+import './styles.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { login } from '../../features/auth/authSlice';
+import {login, logout} from "../../store/authSlice.ts";
+import {useAppDispatch, useAppSelector} from "../../../../store/hooks.ts";
+import { LoginAPI } from '../../services/authService.ts';
 
 
 interface LoginResponse {
   token: string;
   username: string;
-  roles: string[];
+  authorities: string[];
 }
 
 const Login = () => {
@@ -18,7 +19,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
-
+  const isExpired = useAppSelector(state => state.auth.isExpired);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -28,28 +29,11 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post<LoginResponse>('http://localhost:8080/api/auth/login', {
-      username,
-      password
-    });
-
-    console.log(response.data);
-
-    const { token } = response.data;
-    dispatch(login(token));
-
-    navigate('dashboard');
-
-
-    } catch (error : any) {
-      
-      if(error.response && error.response.status === 404) { 
-        setError(error.response.data.message);
-      }
-      if(error.response && error.response.status === 403) {
-        setError("Bad Credentials");
-      }
-
+      const { token } = await LoginAPI.login({ username, password });
+      dispatch(login(token));
+      navigate('dashboard');
+    } catch (err: any) {
+      setError(err.message);
     }
 
     setUsername('');
@@ -57,12 +41,23 @@ const Login = () => {
     
   };
 
+  useEffect( () => {
+    if (isExpired){
+      dispatch(logout());
+      return;
+    }
+
+    if(isAuthenticated){
+      navigate('dashboard');
+    }
+  },[]);
+
   return (
-    <div className='login-container'>
-      <div className='login-form-container'>
+    <div className='container'>
+      <div className='formContainer'>
         <h1>Welcome</h1>
         <form onSubmit={handleSubmit}>
-          <div className='form-group'>
+          <div className='inputGroup'>
             <label htmlFor='username'>Username</label>
             <input
               type='text'
@@ -72,7 +67,7 @@ const Login = () => {
               required
             />
           </div>
-          <div className='form-group'>
+          <div className='inputGroup'>
             <label htmlFor='password'>Password</label>
             <input
               type='password'

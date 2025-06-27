@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../app/hooks';
-import './LogoutButton.css';
-import { logout } from '../../features/auth/authSlice';
+import './styles.css'
+import {useAppDispatch} from "../../../../store/hooks.ts";
+import {logout} from "../../store/authSlice.ts";
 
 const LogoutButton = () => {
 
