@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,5 +42,9 @@ public class UserPrincipal implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public UUID getId(){
+        return id;
     }
 }

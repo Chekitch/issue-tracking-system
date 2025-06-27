@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("parent-projects/{parentId}/sub-projects")
+@RequestMapping("/api/parent-projects/{parentId}/sub-projects")
 public class SubProjectController {
 
-
+    
     private final SubProjectService subProjectService;
 
     @Autowired

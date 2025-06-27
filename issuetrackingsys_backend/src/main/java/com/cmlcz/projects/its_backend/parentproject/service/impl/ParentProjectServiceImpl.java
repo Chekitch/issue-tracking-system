@@ -38,7 +38,7 @@ public class ParentProjectServiceImpl implements ParentProjectService {
     public ArrayList<ParentProjectResponseDTO> findAll() {
 
 
-        List<ParentProject> parentProjectList = parentProjectRepository.findAll();
+        List<ParentProject> parentProjectList = parentProjectRepository.findAllByOrderByCreationDateAsc();
 
         ArrayList<ParentProjectResponseDTO> parentProjectResponseDTOList = new ArrayList<>();
 

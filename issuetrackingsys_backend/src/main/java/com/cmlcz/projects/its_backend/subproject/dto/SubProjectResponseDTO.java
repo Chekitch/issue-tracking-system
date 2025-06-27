@@ -4,14 +4,13 @@ import com.cmlcz.projects.its_backend.parentproject.dto.ParentProjectResponseDTO
 import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
 import lombok.Data;
 
+import java.util.UUID;
 
-@Data
-public class SubProjectResponseDTO {
+public record SubProjectResponseDTO(
+        UUID id,
+        String projectName,
+        String description,
+        UserSummaryDTO createdBy
+){
 
-    private String projectName;
-    private String description;
-
-    private UserSummaryDTO createdBy;
-
-    private ParentProjectResponseDTO parentProject;
 }

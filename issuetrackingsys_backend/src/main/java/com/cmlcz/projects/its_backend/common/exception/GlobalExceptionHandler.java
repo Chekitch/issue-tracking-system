@@ -36,18 +36,26 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, Object>> handleValidationErrors(
+            MethodArgumentNotValidException ex,
+            WebRequest request) {
+
         List<String> errorMessages = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
                 .collect(Collectors.toList());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("errors", errorMessages);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("title", "Validation Failed");
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("errors", errorMessages);
+        body.put("detail", String.join("; ", errorMessages));
+        body.put("instance", request.getDescription(false).replace("uri=", ""));
 
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(body);
     }
 
     @ExceptionHandler(InvalidFormatException.class)

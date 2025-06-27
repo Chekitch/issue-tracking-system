@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class UserController {
 
 
@@ -27,7 +27,6 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('PERM_CREATE_USER')")
     public ResponseEntity<ApiResponse<UserSummaryDTO>> createUser(@RequestBody @Valid CreateUserRequest requestDTO) {
 
         UserSummaryDTO userSummaryDTO = userService.create(requestDTO);

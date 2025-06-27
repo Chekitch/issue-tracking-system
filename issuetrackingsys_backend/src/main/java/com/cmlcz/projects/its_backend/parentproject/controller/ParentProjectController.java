@@ -61,18 +61,18 @@ public class ParentProjectController extends BaseController<ParentProjectCreateD
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<ApiResponse<ParentProjectResponseDTO>> updateParentProject(UUID id,@RequestBody @Valid ParentProjectUpdateDTO requestDTO) {
+    public ResponseEntity<ApiResponse<ParentProjectResponseDTO>> updateParentProject(@PathVariable UUID id,@RequestBody @Valid ParentProjectUpdateDTO requestDTO) {
 
         ParentProjectResponseDTO responseDTO = parentProjectService.update(id,requestDTO);
         ApiResponse<ParentProjectResponseDTO> response = new ApiResponse<>(responseDTO, "Updated Parent Project", 200);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<ApiResponse<Boolean>> deleteParentProject(UUID id) {
+    public ResponseEntity<ApiResponse<Boolean>> deleteParentProject(@PathVariable UUID id) {
         boolean responseDTO = parentProjectService.deleteById(id);
         ApiResponse<Boolean> response = new ApiResponse<>(responseDTO, "Deleted Parent Project", 200);
         return new ResponseEntity<>(response, HttpStatus.OK);
