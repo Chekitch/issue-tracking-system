@@ -38,7 +38,7 @@ public class SubProjectServiceImpl implements SubProjectService {
     }
 
     @Transactional(readOnly = true)
-    public SubProjectResponseDTO findById(UUID parentId, UUID id) {
+    public SubProjectResponseDTO findById(UUID id) {
         SubProject subProject = subProjectRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("There is no subproject with the id")
         );

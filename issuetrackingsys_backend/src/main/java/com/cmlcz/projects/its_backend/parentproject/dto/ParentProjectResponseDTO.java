@@ -17,6 +17,5 @@ public class ParentProjectResponseDTO {
     private UUID id;
     private String projectName;
     private String description;
-    private UserSummaryDTO createdBy;
 
 }

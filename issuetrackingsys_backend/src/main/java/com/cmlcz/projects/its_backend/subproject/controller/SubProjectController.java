@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/parent-projects/{parentId}/sub-projects")
+@RequestMapping("/api/sub-projects")
 public class SubProjectController {
 
     
@@ -27,16 +27,16 @@ public class SubProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<SubProjectResponseDTO>> getSubProjectById(@PathVariable UUID parentId, @PathVariable UUID id) {
-        SubProjectResponseDTO subProjectResponseDTO = subProjectService.findById(parentId, id);
+    public ResponseEntity<ApiResponse<SubProjectResponseDTO>> getSubProjectById(@PathVariable UUID id) {
+        SubProjectResponseDTO subProjectResponseDTO = subProjectService.findById(id);
         ApiResponse<SubProjectResponseDTO> response = new ApiResponse<>
                 (subProjectResponseDTO, ControllerMessages.FETCH_SUCCESS, ControllerMessages.CREATE_SUCCESS_CODE);
         return ResponseEntity.ok(response);
 
     }
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<SubProjectResponseDTO>>> getSubProjectsByParent(@PathVariable UUID parentId) {
+    @GetMapping()
+    public ResponseEntity<ApiResponse<List<SubProjectResponseDTO>>> getSubProjectsByParent(@RequestParam UUID parentId) {
 
         List<SubProjectResponseDTO> responseDTOS= subProjectService.findByParentProjectId(parentId);
         ApiResponse<List<SubProjectResponseDTO>> response = new ApiResponse<>
@@ -45,7 +45,7 @@ public class SubProjectController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<ApiResponse<SubProjectResponseDTO>> createSubProject(@RequestBody @Valid SubProjectRequestDTO subProjectRequest, @PathVariable UUID parentId) {
         SubProjectResponseDTO subProjectResponseDTO = subProjectService.createUnderParent(subProjectRequest, parentId);
 
@@ -67,7 +67,7 @@ public class SubProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteSubProject(@PathVariable UUID parentId, @PathVariable UUID id){
+    public ResponseEntity<ApiResponse<Void>> deleteSubProject(@PathVariable UUID id){
         subProjectService.deleteById(id);
 
         ApiResponse<Void> apiResponse = new ApiResponse<>

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface SubProjectService {
 
-    SubProjectResponseDTO findById(UUID parentId, UUID id);
+    SubProjectResponseDTO findById(UUID id);
     List<SubProjectResponseDTO> findByParentProjectId(UUID parentId);
     SubProjectResponseDTO createUnderParent(SubProjectRequestDTO subProject, UUID parentId);
     SubProjectResponseDTO update(UUID id, SubProjectUpdateDTO subProject);

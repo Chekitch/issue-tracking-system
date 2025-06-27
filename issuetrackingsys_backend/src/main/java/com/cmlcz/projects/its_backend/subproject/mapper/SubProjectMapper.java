@@ -12,6 +12,7 @@ import org.mapstruct.Mapping;
 public interface SubProjectMapper {
 
     @Mapping(source = "createdById", target = "createdBy.id")
+    @Mapping(source = "parentId", target = "parentProject.id")
     SubProject toEntity(SubProjectRequestDTO subProjectRequestDTO);
 
 

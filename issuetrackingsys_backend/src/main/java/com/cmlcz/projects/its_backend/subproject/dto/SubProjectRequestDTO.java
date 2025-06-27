@@ -19,5 +19,7 @@ public class SubProjectRequestDTO {
     @NotNull(message = "createdById is required")
     private UUID createdById;
 
+    @NotNull(message = "parentId is required")
+    private UUID parentId;
 
 }
