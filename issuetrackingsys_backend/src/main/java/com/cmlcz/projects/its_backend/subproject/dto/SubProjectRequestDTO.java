@@ -1,21 +1,25 @@
-package com.cmlcz.projects.its_backend.parentproject.dto;
+package com.cmlcz.projects.its_backend.subproject.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Data;
 
 import java.util.UUID;
 
+
 @Data
-public class ParentProjectCreateDTO {
+public class SubProjectRequestDTO {
+
 
     @NotBlank(message = "Project name must not be blank")
     private String projectName;
 
-    @NotBlank(message = "Description must not be blank")
     private String description;
 
-    @NotNull(message = "CreatedById must not be null")
+    @NotNull(message = "createdById is required")
     private UUID createdById;
+
+    @NotNull(message = "parentId is required")
+    private UUID parentId;
+
 }

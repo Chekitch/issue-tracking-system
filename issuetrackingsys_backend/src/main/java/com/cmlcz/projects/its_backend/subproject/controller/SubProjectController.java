@@ -2,7 +2,7 @@ package com.cmlcz.projects.its_backend.subproject.controller;
 
 import com.cmlcz.projects.its_backend.common.constants.ControllerMessages;
 import com.cmlcz.projects.its_backend.common.dto.ApiResponse;
-import com.cmlcz.projects.its_backend.subproject.dto.SubProjectCreateDTO;
+import com.cmlcz.projects.its_backend.subproject.dto.SubProjectRequestDTO;
 import com.cmlcz.projects.its_backend.subproject.dto.SubProjectResponseDTO;
 import com.cmlcz.projects.its_backend.subproject.dto.SubProjectUpdateDTO;
 import com.cmlcz.projects.its_backend.subproject.service.SubProjectService;
@@ -46,8 +46,8 @@ public class SubProjectController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<SubProjectResponseDTO>> createSubProject(@RequestBody @Valid SubProjectCreateDTO subProjectCreateDTO, @RequestParam UUID parentId) {
-        SubProjectResponseDTO subProjectResponseDTO = subProjectService.createUnderParent(subProjectCreateDTO, parentId);
+    public ResponseEntity<ApiResponse<SubProjectResponseDTO>> createSubProject(@RequestBody @Valid SubProjectRequestDTO subProjectRequest, @PathVariable UUID parentId) {
+        SubProjectResponseDTO subProjectResponseDTO = subProjectService.createUnderParent(subProjectRequest, parentId);
 
         ApiResponse<SubProjectResponseDTO> apiResponse = new ApiResponse<>
                 (subProjectResponseDTO, ControllerMessages.CREATE_SUCCESS, ControllerMessages.CREATE_SUCCESS_CODE);
@@ -57,7 +57,7 @@ public class SubProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<SubProjectResponseDTO>> updateSubProject(@RequestBody @Valid SubProjectUpdateDTO subProjectUpdate, @PathVariable UUID id){
+    public ResponseEntity<ApiResponse<SubProjectResponseDTO>> updateSubProject(@RequestBody @Valid SubProjectUpdateDTO subProjectUpdate, @PathVariable UUID parentId, @PathVariable UUID id){
         SubProjectResponseDTO subProjectResponseDTO = subProjectService.update(id, subProjectUpdate);
 
         ApiResponse<SubProjectResponseDTO> apiResponse = new ApiResponse<>

@@ -1,12 +1,14 @@
 package com.cmlcz.projects.its_backend.parentproject.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
-public record ParentProjectUpdateDTO(
-        @NotBlank(message = "Project name must not be blank") String projectName,
-        @NotBlank(message = "Description must not be blank") String description
-){
+@Data
+public class ParentProjectUpdateDTO {
 
+    @Size(min=1, max=50)
+    private String projectName;
+
+    @Size(min=1, max=255)
+    private String description;
 }
-
-

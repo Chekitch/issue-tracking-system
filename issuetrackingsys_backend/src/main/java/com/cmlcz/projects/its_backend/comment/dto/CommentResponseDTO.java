@@ -1,18 +1,15 @@
 package com.cmlcz.projects.its_backend.comment.dto;
 
-import lombok.Builder;
-import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
-public class CommentResponseDTO {
+public record CommentResponseDTO(
+        Long id,
+        String content,
+        LocalDateTime createdAt,
 
-    private Long id;
-    private String content;
-    private LocalDateTime createdAt;
-
-    private UUID authorId;
-    private String authorUsername;
+        UUID authorId,
+        String authorUsername
+) {
+    
 }

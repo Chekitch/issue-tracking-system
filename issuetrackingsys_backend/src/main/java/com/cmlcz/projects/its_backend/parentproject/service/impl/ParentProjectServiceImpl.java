@@ -51,7 +51,7 @@ public class ParentProjectServiceImpl implements ParentProjectService {
     public ParentProjectResponseDTO findById(UUID uuid) {
 
         ParentProject parentProject = parentProjectRepository.findById(uuid).orElseThrow(
-                () -> new ResourceNotFoundException("Parent project not found")
+                () -> new ResourceNotFoundException("Parent Project with UUID " + uuid + " not found")
         );
 
         return parentProjectMapper.toDto(parentProject);
@@ -61,11 +61,11 @@ public class ParentProjectServiceImpl implements ParentProjectService {
     @Transactional
     public ParentProjectResponseDTO update(UUID uuid, ParentProjectUpdateDTO parentProjectUpdateRequestDTO) {
         ParentProject parentProject = parentProjectRepository.findById(uuid).orElseThrow(
-                () -> new ResourceNotFoundException("There is no parent project with that id")
+                () -> new ResourceNotFoundException("There is no such parent project with id: " + uuid)
         );
 
-        parentProject.setProjectName(parentProjectUpdateRequestDTO.projectName());
-        parentProject.setDescription(parentProjectUpdateRequestDTO.description());
+        parentProject.setProjectName(parentProjectUpdateRequestDTO.getProjectName());
+        parentProject.setDescription(parentProjectUpdateRequestDTO.getDescription());
 
         parentProjectRepository.save(parentProject);
 
@@ -76,8 +76,7 @@ public class ParentProjectServiceImpl implements ParentProjectService {
     @Transactional
     public ParentProjectResponseDTO create(ParentProjectCreateDTO parentProjectCreateRequestDTO) {
 
-        if(!userRepository.existsById(parentProjectCreateRequestDTO.createdById()))
-            throw new ResourceNotFoundException("There is no such user");
+        if(!userRepository.existsById(parentProjectCreateRequestDTO.getCreatedById())) throw new ResourceNotFoundException("There is no such user");
 
         ParentProject parentProject = parentProjectMapper.toEntity(parentProjectCreateRequestDTO);
         parentProjectRepository.save(parentProject);
@@ -89,7 +88,7 @@ public class ParentProjectServiceImpl implements ParentProjectService {
     @Transactional
     public boolean deleteById(UUID uuid) {
         ParentProject project = parentProjectRepository.findById(uuid).orElseThrow(
-                () -> new ResourceNotFoundException("Parent project not found")
+                () -> new ResourceNotFoundException("Parent Project with UUID " + uuid + " not found")
         );
 
         parentProjectRepository.delete(project);

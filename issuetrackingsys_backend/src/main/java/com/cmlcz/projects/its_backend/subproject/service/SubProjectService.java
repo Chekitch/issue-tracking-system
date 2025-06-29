@@ -1,6 +1,6 @@
 package com.cmlcz.projects.its_backend.subproject.service;
 
-import com.cmlcz.projects.its_backend.subproject.dto.SubProjectCreateDTO;
+import com.cmlcz.projects.its_backend.subproject.dto.SubProjectRequestDTO;
 import com.cmlcz.projects.its_backend.subproject.dto.SubProjectResponseDTO;
 import com.cmlcz.projects.its_backend.subproject.dto.SubProjectUpdateDTO;
 
@@ -11,7 +11,7 @@ public interface SubProjectService {
 
     SubProjectResponseDTO findById(UUID id);
     List<SubProjectResponseDTO> findByParentProjectId(UUID parentId);
-    SubProjectResponseDTO createUnderParent(SubProjectCreateDTO subProject, UUID parentId);
+    SubProjectResponseDTO createUnderParent(SubProjectRequestDTO subProject, UUID parentId);
     SubProjectResponseDTO update(UUID id, SubProjectUpdateDTO subProject);
     void deleteById(UUID id);
 }
