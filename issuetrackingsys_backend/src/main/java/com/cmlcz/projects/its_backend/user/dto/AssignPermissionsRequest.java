@@ -4,8 +4,9 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.Set;
 
-public class AssignPermissionsRequest {
+public record AssignPermissionsRequest(
+        @NotEmpty
+        Set<Long> permissionIds
+) {
 
-    @NotEmpty
-    private Set<Long> permissionIds;
 }

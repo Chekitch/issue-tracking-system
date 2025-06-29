@@ -1,14 +1,13 @@
 package com.cmlcz.projects.its_backend.user.dto;
 
-import lombok.Data;
 
 import java.util.Set;
 
-@Data
-public class UserRoleResponseDTO {
+public record UserRoleResponseDTO(
+        Long id,
+        String role,
+        String description,
+        Set<UserPermissionResponse> permissions
+){
 
-    private Long id;
-    private String role;
-    private String description;
-    private Set<UserPermissionResponse> permissions;
 }
