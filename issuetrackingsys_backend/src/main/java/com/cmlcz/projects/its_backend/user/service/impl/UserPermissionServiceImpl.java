@@ -30,7 +30,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     @Override
     public UserPermissionResponse createPermission(CreateUserPermissionRequest userPermissionRequest) {
 
-        if(userPermissionRepository.findByName(userPermissionRequest.getName()).isPresent()){
+        if(userPermissionRepository.findByName(userPermissionRequest.name()).isPresent()){
             throw new ResourceAlreadyExistsException("Permission exists");
         }
 

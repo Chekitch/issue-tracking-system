@@ -3,7 +3,7 @@ package com.cmlcz.projects.its_backend.subproject.service.impl;
 import com.cmlcz.projects.its_backend.common.exception.ResourceNotFoundException;
 import com.cmlcz.projects.its_backend.parentproject.model.ParentProject;
 import com.cmlcz.projects.its_backend.parentproject.repository.ParentProjectRepository;
-import com.cmlcz.projects.its_backend.subproject.dto.SubProjectRequestDTO;
+import com.cmlcz.projects.its_backend.subproject.dto.SubProjectCreateDTO;
 import com.cmlcz.projects.its_backend.subproject.dto.SubProjectResponseDTO;
 import com.cmlcz.projects.its_backend.subproject.dto.SubProjectUpdateDTO;
 import com.cmlcz.projects.its_backend.subproject.mapper.SubProjectMapper;
@@ -40,7 +40,7 @@ public class SubProjectServiceImpl implements SubProjectService {
     @Transactional(readOnly = true)
     public SubProjectResponseDTO findById(UUID id) {
         SubProject subProject = subProjectRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("There is no subproject with the id")
+                () -> new ResourceNotFoundException("There is no subproject with that id")
         );
 
         return subProjectMapper.toDto(subProject);
@@ -48,6 +48,11 @@ public class SubProjectServiceImpl implements SubProjectService {
 
     @Transactional
     public List<SubProjectResponseDTO> findByParentProjectId(UUID parentId) {
+
+        if(!parentProjectRepository.existsById(parentId)){
+            throw new ResourceNotFoundException("There is no parent project with that id");
+        }
+
         List<SubProject> subProjects = subProjectRepository.findAllByParentProjectId(parentId);
 
         ArrayList<SubProjectResponseDTO> subProjectResponseDTOS = new ArrayList<>();
@@ -60,14 +65,14 @@ public class SubProjectServiceImpl implements SubProjectService {
     }
 
     @Transactional
-    public SubProjectResponseDTO createUnderParent(SubProjectRequestDTO subProjectRequest, UUID parentId) {
+    public SubProjectResponseDTO createUnderParent(SubProjectCreateDTO subProjectRequest, UUID parentId) {
 
         if(!parentProjectRepository.existsById(parentId)) throw new ResourceNotFoundException("There is no such parent project");
-        if(!userRepository.existsById(subProjectRequest.getCreatedById())) throw new ResourceNotFoundException("There is no such user");
+        if(!userRepository.existsById(subProjectRequest.createdById())) throw new ResourceNotFoundException("There is no such user");
 
-        SubProject subProject = subProjectMapper.toEntity(subProjectRequest);
+        SubProject subProject = subProjectMapper.toEntity(subProjectRequest, parentId);
 
-        User user = userRepository.getReferenceById(subProjectRequest.getCreatedById());
+        User user = userRepository.getReferenceById(subProjectRequest.createdById());
         ParentProject parentProject = parentProjectRepository.getReferenceById(parentId);
 
         subProject.setCreatedBy(user);
@@ -79,12 +84,13 @@ public class SubProjectServiceImpl implements SubProjectService {
     }
 
     @Override
+    @Transactional
     public SubProjectResponseDTO update(UUID id, SubProjectUpdateDTO subProjectUpdateDTO) {
         SubProject subProject = subProjectRepository.findById(id)
-                .orElseThrow( () -> new ResourceNotFoundException("Resource Not Found"));
+                .orElseThrow( () -> new ResourceNotFoundException("Subproject Not Found"));
 
-        subProject.setProjectName(subProjectUpdateDTO.getProjectName());
-        subProject.setDescription(subProjectUpdateDTO.getDescription());
+        subProject.setProjectName(subProjectUpdateDTO.projectName());
+        subProject.setDescription(subProjectUpdateDTO.description());
 
         subProjectRepository.save(subProject);
 
@@ -92,9 +98,10 @@ public class SubProjectServiceImpl implements SubProjectService {
     }
 
     @Override
+    @Transactional
     public void deleteById(UUID id) {
         SubProject subProject = subProjectRepository.findById(id)
-                .orElseThrow( () -> new ResourceNotFoundException("Resource not found"));
+                .orElseThrow( () -> new ResourceNotFoundException("Subproject not found"));
 
         subProjectRepository.delete(subProject);
 

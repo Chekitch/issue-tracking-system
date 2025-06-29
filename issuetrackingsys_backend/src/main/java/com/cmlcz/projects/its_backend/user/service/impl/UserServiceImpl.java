@@ -51,8 +51,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserSummaryDTO create(CreateUserRequest userRequestDTO) {
 
-        if(!userRoleRepository.existsById(userRequestDTO.getRoleId())){
-            throw new ResourceNotFoundException("There is no role with id : " + userRequestDTO.getRoleId());
+        if(!userRoleRepository.existsById(userRequestDTO.roleId())){
+            throw new ResourceNotFoundException("There is no role with that id ");
         }
 
         User user = userMapper.toEntity(userRequestDTO, userRoleRepository, passwordEncoder);

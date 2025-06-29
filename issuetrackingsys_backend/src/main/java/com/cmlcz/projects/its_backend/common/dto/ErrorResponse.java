@@ -1,17 +1,5 @@
 package com.cmlcz.projects.its_backend.common.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+public record ErrorResponse(String message, int statusCode){
 
-@Getter
-@Setter
-public class ErrorResponse {
-
-    private String message;
-    private int status;
-
-    public ErrorResponse(String message, int status) {
-        this.message = message;
-        this.status = status;
-    }
 }
