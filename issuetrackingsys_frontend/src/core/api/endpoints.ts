@@ -6,13 +6,18 @@ export const AUTH = {
 
 export const PARENT_PROJECTS = {
 
-    BASE: '/parent-projects',
+    ALL: () => `/parent-projects`,
     BY_ID: (id: string) => `/parent-projects/${id}`,
-    SUBPROJECTS: (parentId: string) => `/parent-projects/${parentId}/sub-projects`
+    CREATE: () => `/parent-projects`,
+    UPDATE: (id: string) => `/parent-projects/${id}`,
+    DELETE: (id: string) => `/parent-projects/${id}`, 
 };
 
 export const SUBPROJECTS = {
-    BASE: '/sub-projects',
+    ALL: (parentId: string) => `/sub-projects?parentId=${parentId}`,
     BY_ID: (id: string) => `/sub-projects/${id}`,
-    ISSUES: (subProjectId: string) => `/sub-projects/${subProjectId}/issues`
+    CREATE: (parentId: string) => `/sub-projects?parentId=${parentId}`,
+    UPDATE: (id: string) => `/sub-projects/${id}`,
+    DELETE: (id: string) => `/sub-projects/${id}`,
+
 }

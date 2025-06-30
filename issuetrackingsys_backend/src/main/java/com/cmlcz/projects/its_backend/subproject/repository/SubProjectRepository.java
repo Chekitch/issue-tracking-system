@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface SubProjectRepository extends JpaRepository<SubProject, UUID> {
     List<SubProject> findAllByParentProjectId(UUID parentId);
+
+    List<SubProject> findAllByParentProjectIdOrderByCreationDateAsc(UUID parentId);
 }

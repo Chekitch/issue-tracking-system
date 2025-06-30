@@ -4,7 +4,7 @@ import {
   Button, TextField, CircularProgress, Typography,Box
 } from '@mui/material';
 import { useAppSelector } from '../../../../store/hooks';
-import {ParentProjectAPI} from "../../services/projectService.ts";
+import {ParentProjectAPI, type ParentProject} from "../../services/projectService.ts";
 
 interface Props {
   open: boolean;
@@ -13,6 +13,7 @@ interface Props {
 }
 
 const CreateParentProjectModal: React.FC<Props> = ({ open, onClose, onProjectCreated }) => {
+
   const userId = useAppSelector((state) => state.auth.userId);
   const [projectName, setProjectName] = useState('');
   const [description, setDescription] = useState('');
@@ -42,12 +43,13 @@ const CreateParentProjectModal: React.FC<Props> = ({ open, onClose, onProjectCre
     ParentProjectAPI.createParentProject({
       projectName: trimmedName,
       description: trimmedDescription,
-      createdById: "SDFFSDFSFDS"
-    }).then((project) => {
+      createdById: userId
+    }).then((project : ParentProject) => {
+      console.log(project);
       handleClose();
       onProjectCreated(project.id, project.projectName, project.description);
     }).catch( error => {
-      setError(error.message && 'Failed to create project');
+      setError(error.message || 'Failed to create project');
     }).finally(() => {
       setLoading(false);
     });

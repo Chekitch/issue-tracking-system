@@ -53,7 +53,7 @@ public class SubProjectServiceImpl implements SubProjectService {
             throw new ResourceNotFoundException("There is no parent project with that id");
         }
 
-        List<SubProject> subProjects = subProjectRepository.findAllByParentProjectId(parentId);
+        List<SubProject> subProjects = subProjectRepository.findAllByParentProjectIdOrderByCreationDateAsc(parentId);
 
         ArrayList<SubProjectResponseDTO> subProjectResponseDTOS = new ArrayList<>();
 

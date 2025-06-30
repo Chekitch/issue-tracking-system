@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {login, logout} from "../../store/authSlice.ts";
 import {useAppDispatch, useAppSelector} from "../../../../store/hooks.ts";
-import { LoginAPI } from '../../services/authService.ts';
+import { authAPI } from '../../services/authService.ts';
 
 
 interface LoginResponse {
@@ -29,7 +29,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const { token } = await LoginAPI.login({ username, password });
+      const { token } = await authAPI.login({ username, password });
       dispatch(login(token));
       navigate('dashboard');
     } catch (err: any) {
@@ -41,7 +41,7 @@ const Login = () => {
     
   };
 
-  useEffect( () => {
+  useEffect(() => {
     if (isExpired){
       dispatch(logout());
       return;
@@ -54,9 +54,13 @@ const Login = () => {
 
   return (
     <div className='container'>
+
       <div className='formContainer'>
+
         <h1>Welcome</h1>
+
         <form onSubmit={handleSubmit}>
+
           <div className='inputGroup'>
             <label htmlFor='username'>Username</label>
             <input
@@ -67,6 +71,7 @@ const Login = () => {
               required
             />
           </div>
+
           <div className='inputGroup'>
             <label htmlFor='password'>Password</label>
             <input
@@ -77,9 +82,13 @@ const Login = () => {
               required
             />
           </div>
+
           {error && <p className='error-message'>{error}</p>}
+
           <button type='submit'>Sign In</button>
+
         </form>
+        
       </div>
     </div>
   )

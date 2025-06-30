@@ -1,17 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './styles.css'
-import { ParentProjectAPI } from '../../../projects/services/projectService';
-import { Box, CircularProgress } from '@mui/material';
+import { ParentProjectAPI, type ParentProject } from '../../../projects/services/projectService';
+import { Box, Button, CircularProgress } from '@mui/material';
 import LogoutButton from '../../../../core/auth/components/LogoutButton';
 import SubProjectCard from '../SubprojectCard';
-import { SubProjectAPI } from '../../services/SubProjectAPI';
-
-export interface Subproject {
-  id: string;
-  projectName: string;
-  description: string;
-}
+import { SubProjectAPI, type Subproject } from '../../services/SubProjectAPI';
+import CreateSubProjectModal from '../CreateSubproject';
+import AddIcon from '@mui/icons-material/Add';
+import EditParentProjectModal from '../EditSubproject';
 
 interface ParentProjectDetails {
   id: string;
@@ -28,50 +25,72 @@ function SubprojectPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const fetchData = useCallback(async () => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<ParentProject | null>(null);
+
+  const fetchData = async () => {
     if (!projectId) {
       setError('No project ID provided');
-      setLoading(false);
       return;
     }
-
+    
     setLoading(true);
-    setError('');
 
     try {
-
       const projectData = await ParentProjectAPI.getParentProjectById(projectId);
       setParentProject(projectData);
 
       const subprojectData : Subproject[] = await SubProjectAPI.getSubProjectsByParentProject(projectId);
-      setSubprojects(subprojectData || []);
+      setSubprojects(subprojectData ?? []);
     } catch (err: any) {
-      console.log(err);
       setError(err.message || 'Failed to load project data');
     } finally {
       setLoading(false);
     }
-  }, [projectId]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  const goBack = () => navigate('/dashboard');
-
-  const handleEditSubproject = (id: string, projectName: string, description: string) => {
-    console.log('Edit subproject:', id, projectName, description);
   };
 
-  if (loading) {
+  useEffect(() => {
+
+    fetchData();
+  }, [projectId]);
+
+
+  const handleCreateSubproject = () => {
+    setIsCreateModalOpen(true);
+  }
+
+  const handleEditProject = (id: string, projectName: string, description: string) => {
+    setEditingProject({id, projectName, description});
+    setIsEditModalOpen(true);
+  }
+
+
+
+  const handleSubprojectCreated = (id: string, projectName: string, description: string) => {
+    setSubprojects(subprojects => [...subprojects, {id, projectName, description}]);
+  }
+
+  const handleProjectUpdated = (id: string, projectName: string, description: string) => {
+    setSubprojects(prevProjects => 
+      prevProjects.map(project => project.id===id ? {...project, projectName, description} : project)
+    );
+  }
+
+  const handleProjectDeleted = (id: string) => {
+    setSubprojects(prevProjects => prevProjects.filter(project => project.id !== id));
+  }
+ 
+  const goBack = () => navigate('/dashboard');
+
+
+  if (loading && subprojects.length === 0) {
     return (
       <Box className="loading-container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress sx={{ color: '#4ECDC4' }} size={60} />
       </Box>
     );
-  }
-
-  if (error) {
+  }else if (error && subprojects.length === 0) {
     return (
       <div className="error-container">
         <button className="back-button" onClick={goBack}>Back to Projects</button>
@@ -80,12 +99,20 @@ function SubprojectPage() {
     );
   }
 
+
   return (
     <div className="subprojects-container">
       <div className="subprojects-header">
         <button className="back-button" onClick={goBack}>Back to Projects</button>
         <div className="logout-container"><LogoutButton /></div>
       </div>
+
+      <Button variant="contained"
+          startIcon={<AddIcon/>}
+          onClick={handleCreateSubproject}
+          id='create-subproject-btn'>
+          New Subproject
+      </Button>
 
       {parentProject && (
         <div className="parent-project-info">
@@ -99,7 +126,6 @@ function SubprojectPage() {
         {subprojects.length === 0 ? (
           <div className="no-subprojects">
             <p>No subprojects found for this project</p>
-            <button className="create-subproject-btn">Create Subproject</button>
           </div>
         ) : (
           <div className="subprojects">
@@ -109,12 +135,32 @@ function SubprojectPage() {
                 id={sp.id}
                 projectName={sp.projectName}
                 description={sp.description}
-                onEdit={handleEditSubproject}
+                onEdit={handleEditProject}
               />
             ))}
           </div>
         )}
       </div>
+    
+        {projectId && (
+
+          <CreateSubProjectModal open={isCreateModalOpen}
+                               onClose={() => setIsCreateModalOpen(false)}
+                               onSubprojectCreated={handleSubprojectCreated}
+                               parentId={projectId} />
+          )
+        }
+
+        {editingProject && <EditParentProjectModal
+                            open={isEditModalOpen}
+                            onClose={() => setIsEditModalOpen(false)}
+                          projectId={editingProject.id}
+                          currentName={editingProject.projectName}
+                          currentDescription={editingProject.description}
+                          onSubProjectUpdated={handleProjectUpdated}
+                          onSubProjectDeleted={handleProjectDeleted}
+                          />}
+        
     </div>
   );
 }

@@ -8,7 +8,7 @@ interface LoginResponse {
     authorities: string[];
 }
 
-export const LoginAPI = {
+export const authAPI = {
 
     login: async ({ username, password}: {username: string; password: string; }): Promise<LoginResponse> => {
     try {

@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import "./styles.css";
 
 interface SubprojectCardProps {
   id: string;
   projectName: string;
   description: string;
-  onEdit?: (id: string, projectName: string, description: string) => void;
+  onEdit: (id: string, projectName: string, description: string) => void;
   onViewIssues?: (id: string) => void;
 }
 
 function SubprojectCard({ id, projectName, description, onEdit }: SubprojectCardProps) {
   
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleEdit = () => {
     if (onEdit) {
@@ -29,7 +30,7 @@ function SubprojectCard({ id, projectName, description, onEdit }: SubprojectCard
       </div>
       <p className="subproject-description">{description}</p>
       <div className="subproject-footer">
-        <button className="view-issues-btn" onClick={handleEdit}>
+        <button className="edit-btn" onClick={handleEdit}>
           Edit Subproject
         </button>
         <button className="view-issues-btn" onClick={handleViewIssues}>

@@ -26,25 +26,26 @@ export const ParentProjectAPI = {
     return await axiosInstance.get("/parent-projects");
   },
 
-  getParentProjectById: async (projectId: string | undefined) => {
+  getParentProjectById: async (projectId: string | undefined) : Promise<ParentProject> => {
     if (!projectId) {
       throw new Error("Project ID is required");
     }
     return await axiosInstance.get(`/parent-projects/${projectId}`);
   },
   
-  createParentProject: async (projectData: CreateParentProjectDTO) => {
+  createParentProject: async (projectData: CreateParentProjectDTO): Promise<ParentProject> => {
+
     return await axiosInstance.post("/parent-projects", projectData);
   },
 
-  updateParentProject: async (projectId: string, projectData: UpdateParentProjectDTO) => {
+  updateParentProject: async (projectId: string, projectData: UpdateParentProjectDTO) : Promise<ParentProject>=> {
     if (!projectId) {
       throw new Error("Project ID is required");
     }
     return await axiosInstance.put(`/parent-projects/${projectId}`, projectData);
   },
 
-  deleteParentProject: async (projectId: string) => {
+  deleteParentProject: async (projectId: string) : Promise<void>=> {
     if (!projectId) {
       throw new Error("Project ID is required");
     }

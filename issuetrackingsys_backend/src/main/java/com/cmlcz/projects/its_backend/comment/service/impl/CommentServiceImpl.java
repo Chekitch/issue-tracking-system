@@ -44,11 +44,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponseDTO save(CommentRequestDTO commentRequestDTO) {
 
-        if(!userRepository.existsById(commentRequestDTO.getUserId())){
-            throw new ResourceNotFoundException("There is no user with the id : " + commentRequestDTO.getUserId());
+        if(!userRepository.existsById(commentRequestDTO.userId())){
+            throw new ResourceNotFoundException("There is no user with that id");
         }
-        if(!issueRepository.existsById(commentRequestDTO.getIssueId())){
-            throw new ResourceNotFoundException("There is no issue with the id : " + commentRequestDTO.getIssueId());
+        if(!issueRepository.existsById(commentRequestDTO.issueId())){
+            throw new ResourceNotFoundException("There is no issue with that id");
         }
 
         Comment comment = commentMapper.toEntity(commentRequestDTO);
