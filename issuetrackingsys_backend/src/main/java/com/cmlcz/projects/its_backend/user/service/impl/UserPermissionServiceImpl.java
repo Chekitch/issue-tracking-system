@@ -51,6 +51,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     }
 
     @Override
+    @Transactional
     public UserPermissionResponse getById(Long id) {
         UserPermission userPermission = userPermissionRepository.getReferenceById(id);
 

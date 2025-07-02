@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -21,14 +24,13 @@ public class User extends BaseUuidModel {
     @JoinColumn(name="full_name")
     private String fullName;
 
-    @Column(nullable = false, unique = true)
-    private String email;
 
     @Column(nullable = false)
     private String hashedPassword;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private UserRole role;
 
 }

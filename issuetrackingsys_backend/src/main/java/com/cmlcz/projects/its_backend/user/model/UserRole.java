@@ -4,6 +4,9 @@ import com.cmlcz.projects.its_backend.common.model.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user_role")
+@DynamicUpdate
 public class UserRole extends BaseModel {
 
 
@@ -27,5 +31,6 @@ public class UserRole extends BaseModel {
             joinColumns=@JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<UserPermission> permissions;
 }

@@ -12,7 +12,6 @@ import java.util.List;
 public interface UserRoleMapper {
 
     UserRoleResponseDTO toDto(UserRole userRole);
-
     List<UserRoleResponseDTO> toDTOs(List<UserRole> userRoles);
 
     UserRole toEntity(CreateUserRoleRequest userRoleRequest);

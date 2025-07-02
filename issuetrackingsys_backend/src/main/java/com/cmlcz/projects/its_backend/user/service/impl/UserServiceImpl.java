@@ -1,10 +1,13 @@
 package com.cmlcz.projects.its_backend.user.service.impl;
 
+import com.cmlcz.projects.its_backend.common.exception.ResourceAlreadyExistsException;
 import com.cmlcz.projects.its_backend.common.exception.ResourceNotFoundException;
+import com.cmlcz.projects.its_backend.user.dto.UpdateUserRequest;
 import com.cmlcz.projects.its_backend.user.mapper.UserMapper;
 import com.cmlcz.projects.its_backend.user.model.User;
 import com.cmlcz.projects.its_backend.user.dto.CreateUserRequest;
 import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
+import com.cmlcz.projects.its_backend.user.model.UserRole;
 import com.cmlcz.projects.its_backend.user.repository.UserRepository;
 import com.cmlcz.projects.its_backend.user.repository.UserRoleRepository;
 import com.cmlcz.projects.its_backend.user.service.UserService;
@@ -55,6 +58,10 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("There is no role with that id ");
         }
 
+        if(userRepository.existsByUsername(userRequestDTO.username())){
+            throw new ResourceAlreadyExistsException("This username is already used");
+        }
+
         User user = userMapper.toEntity(userRequestDTO, userRoleRepository, passwordEncoder);
 
         userRepository.save(user);
@@ -66,19 +73,48 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<UserSummaryDTO> getAllUsers() {
-        List<User> users = userRepository.findAllWithRoles();
+        List<User> users = userRepository.findAllWithRolesByOrderByCreationDateAsc();
 
         return userMapper.toDTOs(users);
 
     }
 
+    @Override
     @Transactional
-    public UserSummaryDTO update(CreateUserRequest userRequestDTO) {
-        return null;
+    public UserSummaryDTO updateUser(UUID id, UpdateUserRequest updateUserRequest) {
+        if(! userRepository.getReferenceById(id).getUsername().equals(updateUserRequest.username())
+                && userRepository.existsByUsername(updateUserRequest.username()) ){
+            throw new ResourceAlreadyExistsException("Username is already used");
+        }
+
+        User user = userRepository.getReferenceById(id);
+        user.setUsername(updateUserRequest.username());
+        user.setFullName(updateUserRequest.fullName());
+        if(updateUserRequest.password() != null && !updateUserRequest.password().equalsIgnoreCase("")){
+            String hashedPassword = passwordEncoder.encode(updateUserRequest.password());
+            user.setHashedPassword(hashedPassword);
+        }
+        UserRole userRole = userRoleRepository.findWithPermissionsById(updateUserRequest.roleId()).orElseThrow(
+                () -> new ResourceNotFoundException("There is no that role")
+        );
+
+        user.setRole(userRole);
+
+        userRepository.save(user);
+
+        return userMapper.toDTO(user);
+
+
     }
 
+    @Override
     @Transactional
-    public boolean deleteById(UUID uuid) {
-        return false;
+    public void deleteUser(UUID id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("There is no such user")
+        );
+        userRepository.delete(user);
+
     }
+
 }

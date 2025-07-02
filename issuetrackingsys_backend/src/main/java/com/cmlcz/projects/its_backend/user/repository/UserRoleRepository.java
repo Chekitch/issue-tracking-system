@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     Optional<UserRole> findById(Long id);
-    Optional<UserRole> findByRole(String role);
 
     @EntityGraph(attributePaths = "permissions")
     Optional<UserRole> findWithPermissionsById(@Param("id") Long id);
+    List<UserRole> findAllByOrderByCreationDateAsc();
+    boolean existsByRole(String role);
 
-    List<UserRole> role(String role);
 }

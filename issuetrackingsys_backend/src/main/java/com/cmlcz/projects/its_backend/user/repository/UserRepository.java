@@ -2,8 +2,11 @@ package com.cmlcz.projects.its_backend.user.repository;
 
 import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
 import com.cmlcz.projects.its_backend.user.model.User;
+import com.cmlcz.projects.its_backend.user.model.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -14,13 +17,20 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsById(UUID id);
 
-    @Query("SELECT u from User u JOIN fetch u.role")
-    List<User> findAllWithRoles();
+    boolean existsByUsername(String username);
+    Optional<User> findByUsername(String username);
+
+    @Query("SELECT u from User u JOIN fetch u.role order by u.creationDate asc")
+    List<User> findAllWithRolesByOrderByCreationDateAsc();
 
     @Query("select u from User u join fetch u.role where u.id = :id")
     Optional<User> findById(UUID id);
 
     @Query("select u from User u join fetch u.role r join fetch r.permissions where u.username = :username")
     Optional<User> findByUsernameWithRoleAndPermissions(String username);
+
+    @Modifying
+    @Query("update User u SET u.role = :base where u.role = :old")
+    int reassignUsers(@Param("old") UserRole old, @Param("base") UserRole base);
 
 }
