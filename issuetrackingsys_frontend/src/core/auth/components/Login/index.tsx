@@ -1,7 +1,6 @@
-import React , { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
-import './styles.css'
-import axios from 'axios';
+import './styles.css';
 import { useNavigate } from 'react-router-dom';
 import {login, logout} from "../../store/authSlice.ts";
 import {useAppDispatch, useAppSelector} from "../../../../store/hooks.ts";

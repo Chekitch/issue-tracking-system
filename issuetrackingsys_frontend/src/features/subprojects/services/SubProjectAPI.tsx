@@ -7,10 +7,6 @@ interface CreateSubProjectDTO{
     createdById: string;
 }
 
-interface UpdateSubProjectDTO{
-    projectName: string;
-    description: string;
-}
 export interface Subproject {
   id: string;
   projectName: string;
@@ -26,11 +22,10 @@ export const SubProjectAPI = {
     },
 
     createSubProject: async (subProject: CreateSubProjectDTO, parentId: string) : Promise<Subproject> => {
-
         return await axiosInstance.post(SUBPROJECTS.CREATE(parentId), subProject);
     },
 
-    updateSubProject: async (id: string, subProject: UpdateSubProjectDTO) : Promise<Subproject> => {
+    updateSubProject: async (id: string, subProject: Partial<CreateSubProjectDTO>) : Promise<Subproject> => {
         return await axiosInstance.put(SUBPROJECTS.UPDATE(id), subProject);
     },
 

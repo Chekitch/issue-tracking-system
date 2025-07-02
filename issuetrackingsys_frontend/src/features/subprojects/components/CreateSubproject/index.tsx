@@ -11,7 +11,7 @@ interface Props{
     parentId: string;
 }
 
-const CreateSubProjectModal: React.FC<Props> = ({open, onClose, onSubprojectCreated, parentId}) => {
+const CreateSubProjectModal = ({open, onClose, onSubprojectCreated, parentId} : Props) => {
     const userId = useAppSelector((state) => state.auth.userId);
     const [projectName, setProjectName] = useState('');
     const [description, setDescription] = useState('');

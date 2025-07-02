@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
-interface SubprojectCardProps {
+interface Props {
   id: string;
   projectName: string;
   description: string;
@@ -9,7 +9,7 @@ interface SubprojectCardProps {
   onViewIssues?: (id: string) => void;
 }
 
-function SubprojectCard({ id, projectName, description, onEdit }: SubprojectCardProps) {
+function SubprojectCard({ id, projectName, description, onEdit }: Props) {
   
   const navigate = useNavigate();
 

@@ -6,9 +6,8 @@ import {ParentProjectAPI, type ParentProject} from "../../services/projectServic
 import ParentProjectCard from "../ProjectCard";
 import CreateParentProjectModal from "../CreateProject";
 import EditParentProjectModal from "../EditProject";
-import LogoutButton from '../../../../core/auth/components/LogoutButton/index.tsx';
 
-function ParentProject() {
+function ParentProjectList() {
 
     const [projects, setProjects] = useState<ParentProject[]>([]);
     const [loading, setLoading] = useState(false);
@@ -90,10 +89,6 @@ function ParentProject() {
                     New Project
                 </Button>
             </div>
-
-            <div className='logout-container'>
-                <LogoutButton/>
-            </div>
             
             {projects.length === 0 ? (
                 <div className="no-projects">
@@ -129,4 +124,4 @@ function ParentProject() {
     )
 }
 
-export default ParentProject
+export default ParentProjectList

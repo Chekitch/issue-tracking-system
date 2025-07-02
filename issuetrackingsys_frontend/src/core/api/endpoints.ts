@@ -21,3 +21,18 @@ export const SUBPROJECTS = {
     DELETE: (id: string) => `/sub-projects/${id}`,
 
 }
+
+export const USERS = {
+    ALL: () => `/users`,
+    BY_ID: (id: string) => `/users/${id}`,
+    CREATE: () =>  `/users`,
+    UPDATE: (id: string) => `/users/${id}`,
+    DELETE: (id: string) => `/users/${id}`
+}
+
+export const ROLES = {
+    ALL: () => `/roles`,
+    CREATE: () => `/roles`,
+    UPDATE: (id: number) => `/roles/${id}`,
+    DELETE: (id: number) => `/roles/${id}`,
+}

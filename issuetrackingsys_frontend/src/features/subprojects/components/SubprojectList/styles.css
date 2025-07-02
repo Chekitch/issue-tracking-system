@@ -69,13 +69,10 @@
 }
 
 .error {
+  color: #ff7575;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 250px;
   font-size: 1.5rem;
-}
-
-.error {
-  color: #ff7575;
 }

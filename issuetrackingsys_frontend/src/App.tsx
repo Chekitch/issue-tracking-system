@@ -8,6 +8,10 @@ import { setAuthToken } from './core/api/axios-config.ts'
 import SubprojectPage from './features/subprojects/components/SubprojectList/index.tsx'
 import Dashboard from './pages/DashboardPage/index.tsx'
 import NotFound from './pages/NotFoundPage/index.tsx'
+import Layout from './features/Sidebar/Layout.tsx'
+import ParentProjectList from './features/projects/components/ProjectList/index.tsx'
+import UserList from './features/user/components/UserList/index.tsx'
+import RoleList from './features/roles/components/RoleList/index.tsx'
 
 function App() {
 
@@ -20,11 +24,17 @@ function App() {
         <Route path='/' element={<Login/>} />
 
         <Route element={<ProtectedRoutes/>}>
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/projects/:projectId/subprojects' element={<SubprojectPage />} />
+          <Route element={<Layout/>}>
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/projects' element={<ParentProjectList />} />
+            <Route path='/projects/:projectId/subprojects' element={<SubprojectPage />} />
+            <Route path='/users' element={<UserList />} />
+            <Route path='/roles' element={<RoleList />} />
+            <Route path='*' element={<NotFound/>} />
+          </Route>
         </Route>
 
-        <Route path='*' element={<NotFound/>} />
+  
       </Routes>
     </>
   )

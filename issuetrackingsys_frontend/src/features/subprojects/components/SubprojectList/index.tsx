@@ -1,27 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './styles.css'
 import { ParentProjectAPI, type ParentProject } from '../../../projects/services/projectService';
 import { Box, Button, CircularProgress } from '@mui/material';
-import LogoutButton from '../../../../core/auth/components/LogoutButton';
 import SubProjectCard from '../SubprojectCard';
 import { SubProjectAPI, type Subproject } from '../../services/SubProjectAPI';
 import CreateSubProjectModal from '../CreateSubproject';
 import AddIcon from '@mui/icons-material/Add';
 import EditParentProjectModal from '../EditSubproject';
 
-interface ParentProjectDetails {
-  id: string;
-  projectName: string;
-  description: string;
-}
 
 function SubprojectPage() {
   const { projectId } = useParams<{projectId: string}>();
   const navigate = useNavigate();
 
   const [subprojects, setSubprojects] = useState<Subproject[]>([]);
-  const [parentProject, setParentProject] = useState<ParentProjectDetails | null>(null);
+  const [parentProject, setParentProject] = useState<ParentProject | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -93,7 +87,6 @@ function SubprojectPage() {
   }else if (error && subprojects.length === 0) {
     return (
       <div className="error-container">
-        <button className="back-button" onClick={goBack}>Back to Projects</button>
         <div className="error">{error}</div>
       </div>
     );
@@ -102,10 +95,6 @@ function SubprojectPage() {
 
   return (
     <div className="subprojects-container">
-      <div className="subprojects-header">
-        <button className="back-button" onClick={goBack}>Back to Projects</button>
-        <div className="logout-container"><LogoutButton /></div>
-      </div>
 
       <Button variant="contained"
           startIcon={<AddIcon/>}

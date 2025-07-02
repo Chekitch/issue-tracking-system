@@ -17,15 +17,7 @@ interface Props {
   onProjectDeleted?: (id: string) => void;
 }
 
-const EditParentProjectModal: React.FC<Props> = ({ 
-  open, 
-  onClose, 
-  projectId, 
-  currentName, 
-  currentDescription,
-  onProjectUpdated,
-  onProjectDeleted 
-}) => {
+const EditParentProjectModal = ({ open, onClose, projectId, currentName, currentDescription,onProjectUpdated,onProjectDeleted } : Props) => {
   const [projectName, setProjectName] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
@@ -119,8 +111,10 @@ const EditParentProjectModal: React.FC<Props> = ({
         open={open} 
         onClose={handleClose} 
         fullWidth
-        PaperProps={{ 
-          sx: { bgcolor: '#2C3E50' } 
+        slotProps={{
+          paper:{
+            sx: {bgColor: '#2C3E50'}
+          }
         }}
       >
         <DialogTitle sx={{ 
@@ -198,8 +192,10 @@ const EditParentProjectModal: React.FC<Props> = ({
       <Dialog
         open={confirmDeleteOpen}
         onClose={handleCancelDelete}
-        PaperProps={{ 
-          sx: { bgcolor: '#2C3E50', color: '#F5F5F5' } 
+        slotProps={{
+          paper:{
+            sx: { bgColor: '#2C3E50', color: '#F5F5F5'}
+          }
         }}
       >
         <DialogTitle>

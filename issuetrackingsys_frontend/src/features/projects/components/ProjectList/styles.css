@@ -39,12 +39,6 @@
   margin-top: 1rem;
 }
 
-.logout-container {
-    position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-}
-
 #create-parent-project-btn{
   background-color: #366461;
   color: #F5F5F5;

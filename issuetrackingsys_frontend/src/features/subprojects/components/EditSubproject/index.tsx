@@ -17,15 +17,8 @@ interface Props {
   onSubProjectDeleted?: (id: string) => void;
 }
 
-const EditParentProjectModal: React.FC<Props> = ({ 
-  open, 
-  onClose, 
-  projectId, 
-  currentName, 
-  currentDescription,
-  onSubProjectUpdated,
-  onSubProjectDeleted 
-}) => {
+const EditParentProjectModal = ({ open, onClose, projectId, currentName, currentDescription,onSubProjectUpdated,onSubProjectDeleted } : Props) => {
+  
   const [projectName, setProjectName] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');

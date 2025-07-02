@@ -1,4 +1,3 @@
-import ParentProject from "../../features/projects/components/ProjectList"
 
 
 
@@ -8,7 +7,7 @@ const Dashboard = () => {
     <>
     
     <div>
-      <ParentProject />
+      <h4>Dashboard</h4>
     </div>
     
     </>

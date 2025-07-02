@@ -12,7 +12,7 @@ interface Props {
   onProjectCreated: (id:string, projectName: string, description: string) => void;
 }
 
-const CreateParentProjectModal: React.FC<Props> = ({ open, onClose, onProjectCreated }) => {
+const CreateParentProjectModal = ({ open, onClose, onProjectCreated } : Props) => {
 
   const userId = useAppSelector((state) => state.auth.userId);
   const [projectName, setProjectName] = useState('');
