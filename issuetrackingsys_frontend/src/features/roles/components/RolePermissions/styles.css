@@ -1,0 +1,19 @@
+.rp-list-container {
+  scrollbar-width: thin;
+  scrollbar-color: #4ECDC4 #233142;
+}
+
+.rp-list-container::-webkit-scrollbar {
+  width: 8px;
+  background: #233142;
+  border-radius: 8px;
+}
+
+.rp-list-container::-webkit-scrollbar-thumb {
+  background: #4ECDC4;
+  border-radius: 8px;
+}
+
+.rp-list-container::-webkit-scrollbar-thumb:hover {
+  background: #3dbdb5;
+}

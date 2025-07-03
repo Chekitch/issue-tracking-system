@@ -36,3 +36,15 @@ export const ROLES = {
     UPDATE: (id: number) => `/roles/${id}`,
     DELETE: (id: number) => `/roles/${id}`,
 }
+
+export const PERMISSIONS = {
+    ALL: () => `/permissions`,
+    CREATE: () => `/permissions`,
+    UPDATE: (id: number) => `/permissions/${id}`,
+    DELETE: (id: number) => `/permissions/${id}`,
+    ASSIGN_TO_ROLE: (permissionId: number, roleId: number) => 
+        `/roles/${roleId}/permissions/${permissionId}`,
+    REMOVE_FROM_ROLE: (permissionId: number, roleId: number) => 
+        `/roles/${roleId}/permissions/${permissionId}`,
+    BY_ROLE: (roleId: number) => `/roles/${roleId}/permissions`
+}

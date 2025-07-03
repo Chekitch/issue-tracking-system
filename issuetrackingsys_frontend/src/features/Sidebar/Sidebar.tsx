@@ -21,6 +21,7 @@ import {
 } from '@mui/icons-material';
 import SecurityIcon from '@mui/icons-material/Security';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LockIcon from '@mui/icons-material/Lock';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../../store/hooks';
 import { logout } from '../../core/auth/store/authSlice';
@@ -42,7 +43,8 @@ const menuItems: MenuItem[] = [
     icon: <People />,   
     path: '/users',
     children:[
-      { id: 'roles', text: 'Roles', path: '/roles', icon: <SecurityIcon/>}
+      { id: 'roles', text: 'Roles', path: '/roles', icon: <SecurityIcon/>},
+      { id: 'permissions', text: 'Permissions', path: '/permissions', icon: <LockIcon/>}
     ]
   },
 ];

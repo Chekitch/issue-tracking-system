@@ -2,11 +2,11 @@ package com.cmlcz.projects.its_backend.user.service.impl;
 
 import com.cmlcz.projects.its_backend.common.exception.ResourceAlreadyExistsException;
 import com.cmlcz.projects.its_backend.common.exception.ResourceNotFoundException;
-import com.cmlcz.projects.its_backend.user.dto.UpdateUserRequest;
+import com.cmlcz.projects.its_backend.user.dto.user.CreateUserDTO;
+import com.cmlcz.projects.its_backend.user.dto.user.UpdateUserDTO;
 import com.cmlcz.projects.its_backend.user.mapper.UserMapper;
 import com.cmlcz.projects.its_backend.user.model.User;
-import com.cmlcz.projects.its_backend.user.dto.CreateUserRequest;
-import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
+import com.cmlcz.projects.its_backend.user.dto.user.UserSummaryDTO;
 import com.cmlcz.projects.its_backend.user.model.UserRole;
 import com.cmlcz.projects.its_backend.user.repository.UserRepository;
 import com.cmlcz.projects.its_backend.user.repository.UserRoleRepository;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -44,15 +45,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserSummaryDTO getUserById(UUID id) {
-        User user = userRepository
-                .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = loadUserOrFail(id);
 
         return userMapper.toDTO(user);
     }
 
     @Transactional
-    public UserSummaryDTO create(CreateUserRequest userRequestDTO) {
+    public UserSummaryDTO create(CreateUserDTO userRequestDTO) {
 
         if(!userRoleRepository.existsById(userRequestDTO.roleId())){
             throw new ResourceNotFoundException("There is no role with that id ");
@@ -81,20 +80,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserSummaryDTO updateUser(UUID id, UpdateUserRequest updateUserRequest) {
-        if(! userRepository.getReferenceById(id).getUsername().equals(updateUserRequest.username())
-                && userRepository.existsByUsername(updateUserRequest.username()) ){
+    public UserSummaryDTO updateUser(UUID id, UpdateUserDTO updateUserDTO) {
+        if(! userRepository.getReferenceById(id).getUsername().equals(updateUserDTO.username())
+                && userRepository.existsByUsername(updateUserDTO.username()) ){
             throw new ResourceAlreadyExistsException("Username is already used");
         }
 
-        User user = userRepository.getReferenceById(id);
-        user.setUsername(updateUserRequest.username());
-        user.setFullName(updateUserRequest.fullName());
-        if(updateUserRequest.password() != null && !updateUserRequest.password().equalsIgnoreCase("")){
-            String hashedPassword = passwordEncoder.encode(updateUserRequest.password());
+        User user = loadUserOrFail(id);
+        user.setUsername(updateUserDTO.username());
+        user.setFullName(updateUserDTO.fullName());
+        if(updateUserDTO.password() != null && !updateUserDTO.password().equalsIgnoreCase("")){
+            String hashedPassword = passwordEncoder.encode(updateUserDTO.password());
             user.setHashedPassword(hashedPassword);
         }
-        UserRole userRole = userRoleRepository.findWithPermissionsById(updateUserRequest.roleId()).orElseThrow(
+        UserRole userRole = userRoleRepository.findWithPermissionsById(updateUserDTO.roleId()).orElseThrow(
                 () -> new ResourceNotFoundException("There is no that role")
         );
 
@@ -110,11 +109,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(UUID id) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("There is no such user")
-        );
+        User user = loadUserOrFail(id);
+
         userRepository.delete(user);
 
+    }
+
+    public User loadUserOrFail(UUID id){
+        return userRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
 }

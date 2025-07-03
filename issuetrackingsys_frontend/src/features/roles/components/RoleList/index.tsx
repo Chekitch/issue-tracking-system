@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import CreateRoleModal from "../CreateRole";
 import EditRoleModal from "../EditRole";
+import RolePermissions from "../RolePermissions";
 
 function RoleList() {
   const [roles, setRoles] = useState<UserRole[]>([]);
@@ -25,6 +26,9 @@ function RoleList() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+
+  const [isPermissionsModalOpen, setIsPermissionsModalOpen] = useState(false);
+  const [permissionsRole, setPermissionsRole] = useState<UserRole | null>(null);
 
   useEffect(() => {
     fetchRoles();
@@ -47,13 +51,19 @@ function RoleList() {
   };
 
   const handleRoleCreated = (role: UserRole) => {
-    setRoles([...roles, role]);
+    setRoles(prevRoles => [...prevRoles, role]);
   };
 
   const handleEditRole = (role: UserRole) => {
     setSelectedRole(role);
     setIsEditModalOpen(true);
   };
+
+  const handleManagePermissions = (role: UserRole) => {
+    setPermissionsRole(role);
+    setIsPermissionsModalOpen(true);
+
+  }
 
   const handleRoleUpdated = (updated: UserRole) => {
     setRoles(prevRoles => 
@@ -114,8 +124,17 @@ function RoleList() {
                   <TableCell>{role.role}</TableCell>
                   <TableCell>{role.description}</TableCell>
                   <TableCell align="right">
-                    <Button size="small" className="edit-btn" onClick={() => handleEditRole(role)}>
-                      Edit
+                    <Button
+                      size="small"
+                      className="edit-btn"
+                      onClick={() => handleEditRole(role)}
+                    >Edit
+                    </Button>
+                    <Button 
+                      size="small" 
+                      className="manage-permissions-btn" 
+                      onClick={() => handleManagePermissions(role)}
+                    > Permissions
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -138,6 +157,15 @@ function RoleList() {
           role={selectedRole}
           onRoleUpdated={handleRoleUpdated}
           onRoleDeleted={handleRoleDeleted}
+        />
+      )}
+
+      {permissionsRole && (
+        <RolePermissions
+          open={isPermissionsModalOpen}
+          onClose={() => setIsPermissionsModalOpen(false)}
+          role={permissionsRole}
+          onRoleUpdated={handleRoleUpdated}
         />
       )}
     </div>

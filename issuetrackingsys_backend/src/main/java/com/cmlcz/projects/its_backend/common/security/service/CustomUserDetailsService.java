@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Transactional
     public UserDetails loadUserByUsername(String username){
-        return userRepository.findByUsernameWithRoleAndPermissions(username)
+        return userRepository.findByUsername(username)
                 .map(UserPrincipal::new)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("User not found")

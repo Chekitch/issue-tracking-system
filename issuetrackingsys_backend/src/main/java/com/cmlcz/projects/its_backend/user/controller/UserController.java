@@ -2,9 +2,9 @@ package com.cmlcz.projects.its_backend.user.controller;
 
 import com.cmlcz.projects.its_backend.common.constants.ControllerMessages;
 import com.cmlcz.projects.its_backend.common.dto.ApiResponse;
-import com.cmlcz.projects.its_backend.user.dto.CreateUserRequest;
-import com.cmlcz.projects.its_backend.user.dto.UpdateUserRequest;
-import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
+import com.cmlcz.projects.its_backend.user.dto.user.CreateUserDTO;
+import com.cmlcz.projects.its_backend.user.dto.user.UpdateUserDTO;
+import com.cmlcz.projects.its_backend.user.dto.user.UserSummaryDTO;
 import com.cmlcz.projects.its_backend.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserSummaryDTO>> createUser(@RequestBody @Valid CreateUserRequest requestDTO) {
+    public ResponseEntity<ApiResponse<UserSummaryDTO>> createUser(@RequestBody @Valid CreateUserDTO requestDTO) {
 
         UserSummaryDTO userSummaryDTO = userService.create(requestDTO);
         ApiResponse<UserSummaryDTO> response = new ApiResponse<>(userSummaryDTO, "Created user", 200);
@@ -50,8 +50,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserSummaryDTO>> updateUser(@RequestBody @Valid UpdateUserRequest updateUserRequest, @PathVariable UUID id){
-        UserSummaryDTO userSummaryDTO = userService.updateUser(id, updateUserRequest);
+    public ResponseEntity<ApiResponse<UserSummaryDTO>> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO, @PathVariable UUID id){
+        UserSummaryDTO userSummaryDTO = userService.updateUser(id, updateUserDTO);
         ApiResponse<UserSummaryDTO> response = new ApiResponse<>(userSummaryDTO, ControllerMessages.UPDATE_SUCCESS, ControllerMessages.UPDATE_SUCCESS_CODE);
         return ResponseEntity.ok(response);
     }

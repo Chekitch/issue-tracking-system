@@ -1,6 +1,6 @@
 package com.cmlcz.projects.its_backend.subproject.dto;
 
-import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
+import com.cmlcz.projects.its_backend.user.dto.user.UserSummaryDTO;
 
 import java.util.UUID;
 

@@ -1,10 +1,10 @@
 package com.cmlcz.projects.its_backend.user.mapper;
 
 import com.cmlcz.projects.its_backend.common.exception.ResourceNotFoundException;
-import com.cmlcz.projects.its_backend.user.dto.CreateUserRequest;
-import com.cmlcz.projects.its_backend.user.dto.UpdateUserRequest;
+import com.cmlcz.projects.its_backend.user.dto.user.CreateUserDTO;
+import com.cmlcz.projects.its_backend.user.dto.user.UpdateUserDTO;
 import com.cmlcz.projects.its_backend.user.model.User;
-import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
+import com.cmlcz.projects.its_backend.user.dto.user.UserSummaryDTO;
 import com.cmlcz.projects.its_backend.user.model.UserRole;
 import com.cmlcz.projects.its_backend.user.repository.UserRoleRepository;
 import org.mapstruct.Context;
@@ -24,12 +24,12 @@ public interface UserMapper {
 
     @Mapping(source = "roleId", target = "role", qualifiedByName = "mapRole")
     @Mapping(target = "hashedPassword", source = "password", qualifiedByName = "encodePassword")
-    User toEntity(CreateUserRequest createUserRequest, @Context UserRoleRepository userRoleRepository,
+    User toEntity(CreateUserDTO createUserDTO, @Context UserRoleRepository userRoleRepository,
                   @Context PasswordEncoder passwordEncoder);
 
     @Mapping(source = "roleId", target = "role", qualifiedByName = "mapRole")
     @Mapping(target = "hashedPassword", source = "password", qualifiedByName = "encodePassword")
-    User toEntity(UpdateUserRequest updateUserRequest, @Context UserRoleRepository userRoleRepository,
+    User toEntity(UpdateUserDTO updateUserDTO, @Context UserRoleRepository userRoleRepository,
                   @Context PasswordEncoder passwordEncoder);
 
 

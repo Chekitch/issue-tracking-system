@@ -1,4 +1,4 @@
-.roles-container {
+.permissions-container {
   max-width: 1500px;
   margin: 0 auto;
   padding: 2rem;
@@ -14,28 +14,28 @@
   margin-bottom: 1.5rem;
 }
 
-.create-role-btn {
+.create-permission-btn {
   background-color: #366461 !important;
   color: #F5F5F5 !important;
   border: 1px solid #455D7A !important;
 }
 
-.create-role-btn:hover {
+.create-permission-btn:hover {
   background-color: #074743 !important;
 }
 
-.role-table-container {
+.permission-table-container {
   background-color: #2c3e50 !important;
   border-radius: 8px !important;
 }
 
-.role-table-container th {
+.permission-table-container th {
   background-color: #233142 !important;
   color: #f5f5f5 !important;
   font-weight: bold !important;
 }
 
-.role-table-container td {
+.permission-table-container td {
   color: #e0e0e0 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
@@ -66,13 +66,3 @@
   min-height: 400px;
 }
 
-.manage-permissions-btn {
-  color: #4ECDC4 !important;
-  border: 1px solid #4ECDC4 !important;
-  background-color: transparent !important;
-  margin-left: 10px !important;
-}
-
-.manage-permissions-btn:hover {
-  background-color: rgba(78, 205, 196, 0.1) !important;
-}

@@ -1,6 +1,5 @@
 package com.cmlcz.projects.its_backend.user.repository;
 
-import com.cmlcz.projects.its_backend.user.dto.UserSummaryDTO;
 import com.cmlcz.projects.its_backend.user.model.User;
 import com.cmlcz.projects.its_backend.user.model.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

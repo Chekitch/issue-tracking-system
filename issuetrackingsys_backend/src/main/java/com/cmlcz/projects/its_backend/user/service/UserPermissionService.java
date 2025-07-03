@@ -1,14 +1,15 @@
 package com.cmlcz.projects.its_backend.user.service;
 
-import com.cmlcz.projects.its_backend.user.dto.CreateUserPermissionRequest;
-import com.cmlcz.projects.its_backend.user.dto.UserPermissionResponse;
-import com.cmlcz.projects.its_backend.user.model.UserPermission;
-import jakarta.validation.Valid;
+import com.cmlcz.projects.its_backend.user.dto.userPermission.CreateUserPermissionDTO;
+import com.cmlcz.projects.its_backend.user.dto.userPermission.UpdateUserPermissionDTO;
+import com.cmlcz.projects.its_backend.user.dto.userPermission.UserPermissionDTO;
 
 import java.util.List;
 
 public interface UserPermissionService {
-    UserPermissionResponse createPermission(CreateUserPermissionRequest userPermissionRequest);
-    List<UserPermissionResponse> getAllPermissions();
-    UserPermissionResponse getById(Long id);
+    UserPermissionDTO createPermission(CreateUserPermissionDTO userPermissionRequest);
+    List<UserPermissionDTO> getAllPermissions();
+    UserPermissionDTO getById(Long id);
+    UserPermissionDTO update(UpdateUserPermissionDTO updateUserPermissionDTO, Long id);
+    void delete(Long id);
 }

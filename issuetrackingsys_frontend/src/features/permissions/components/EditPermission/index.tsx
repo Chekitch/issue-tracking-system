@@ -12,20 +12,21 @@ import {
   Typography,
   IconButton
 } from '@mui/material';
-import { RoleAPI, type UserRole } from '../../services/roleService';
+import { PermissionAPI, type Permission } from '../../services/permissionService';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  role: UserRole;
-  onRoleUpdated: (role: UserRole) => void;
-  onRoleDeleted: (roleId: number) => void;
+  permission: Permission;
+  onPermissionUpdated: (permission: Permission) => void;
+  onPermissionDeleted: (permissionId: number) => void;
 }
 
-const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Props) => {
+const EditPermissionModal = ({ open, onClose, permission, onPermissionUpdated, onPermissionDeleted }: Props) => {
   const [formData, setFormData] = useState({
-    role: '',
+    name: '',
     description: ''
   });
   
@@ -34,18 +35,17 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
   const [isDeleting, setIsDeleting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-  
 
   useEffect(() => {
     if (open) {
       setFormData({
-        role: role.role,
-        description: role.description
+        name: permission.name,
+        description: permission.description
       });
       setApiError(null);
       setErrors({});
     }
-  }, [open, role]);
+  }, [open, permission]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -60,7 +60,7 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
-    if (!formData.role.trim()) newErrors.role = 'Role name is required';
+    if (!formData.name.trim()) newErrors.name = 'Permission name is required';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
     
     setErrors(newErrors);
@@ -73,11 +73,11 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
     setIsSubmitting(true);
 
     try {
-      const updatedRole = await RoleAPI.updateRole(role.id, formData);
-      onRoleUpdated(updatedRole);
+      const updatedPermission = await PermissionAPI.updatePermission(permission.id, formData);
+      onPermissionUpdated(updatedPermission);
       onClose();
     } catch (error: any) {
-      setApiError(error.message || 'Failed to update role. Please try again.');
+      setApiError(error.message || 'Failed to update permission. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -90,13 +90,12 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     try {
-      console.log(role.id);
-      await RoleAPI.deleteRole(role.id);
-      onRoleDeleted(role.id);
+      await PermissionAPI.deletePermission(permission.id);
+      onPermissionDeleted(permission.id);
       setConfirmDeleteOpen(false);
       onClose();
     } catch (error: any) {
-      setApiError(error.message || 'Failed to delete role');
+      setApiError(error.message || 'Failed to delete permission');
     } finally {
       setIsDeleting(false);
     }
@@ -110,7 +109,7 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
-          <span>Edit Role</span>
+          <span>Edit Permission</span>
           <IconButton 
             onClick={handleDeleteClick}
             sx={{ color: '#F95959' }}
@@ -126,12 +125,12 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
             {apiError && <Alert severity="error">{apiError}</Alert>}
             
             <TextField
-              label="Role Name"
-              name="role"
-              value={formData.role}
+              label="Permission Name"
+              name="name"
+              value={formData.name}
               onChange={handleInputChange}
-              error={!!errors.role}
-              helperText={errors.role}
+              error={!!errors.name}
+              helperText={errors.name}
               fullWidth
             />
             
@@ -146,7 +145,6 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
               multiline
               rows={4}
             />
-            
           </Stack>
         </DialogContent>
         
@@ -160,16 +158,16 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
             variant="contained" 
             color="primary"
           >
-            {isSubmitting ? <CircularProgress size={24} /> : 'Update Role'}
+            {isSubmitting ? <CircularProgress size={24} /> : 'Update Permission'}
           </Button>
         </DialogActions>
       </Dialog>
 
       <Dialog open={confirmDeleteOpen} onClose={() => setConfirmDeleteOpen(false)}>
-        <DialogTitle>Delete Role</DialogTitle>
+        <DialogTitle>Delete Permission</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete role "{role.role}"? This action cannot be undone.
+            Are you sure you want to delete permission "{permission.name}"? This action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
@@ -190,4 +188,4 @@ const EditRoleModal = ({ open, onClose, role, onRoleUpdated,onRoleDeleted } : Pr
   );
 };
 
-export default EditRoleModal;
+export default EditPermissionModal;

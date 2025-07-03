@@ -2,9 +2,11 @@ package com.cmlcz.projects.its_backend.user.service.impl;
 
 import com.cmlcz.projects.its_backend.common.exception.ResourceAlreadyExistsException;
 import com.cmlcz.projects.its_backend.common.exception.ResourceNotFoundException;
-import com.cmlcz.projects.its_backend.user.dto.CreateUserRoleRequest;
-import com.cmlcz.projects.its_backend.user.dto.UpdateUserRoleRequest;
-import com.cmlcz.projects.its_backend.user.dto.UserRoleResponseDTO;
+import com.cmlcz.projects.its_backend.user.dto.userPermission.UserPermissionDTO;
+import com.cmlcz.projects.its_backend.user.dto.userRole.CreateUserRoleDTO;
+import com.cmlcz.projects.its_backend.user.dto.userRole.UpdateUserRoleDTO;
+import com.cmlcz.projects.its_backend.user.dto.userRole.UserRoleDTO;
+import com.cmlcz.projects.its_backend.user.mapper.UserPermissionMapper;
 import com.cmlcz.projects.its_backend.user.mapper.UserRoleMapper;
 import com.cmlcz.projects.its_backend.user.model.UserPermission;
 import com.cmlcz.projects.its_backend.user.model.UserRole;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,17 +28,19 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final UserRoleRepository userRoleRepository;
     private final UserRoleMapper userRoleMapper;
     private final UserRepository userRepository;
+    private final UserPermissionMapper userPermissionMapper;
 
     @Autowired
-    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, UserRoleMapper userRoleMapper, UserPermissionRepository userPermissionRepository, UserRepository userRepository){
+    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, UserRoleMapper userRoleMapper, UserPermissionRepository userPermissionRepository, UserRepository userRepository, UserPermissionMapper userPermissionMapper){
         this.userRoleRepository = userRoleRepository;
         this.userRoleMapper = userRoleMapper;
         this.userPermissionRepository = userPermissionRepository;
         this.userRepository = userRepository;
+        this.userPermissionMapper = userPermissionMapper;
     }
 
     @Override
-    public UserRoleResponseDTO create(CreateUserRoleRequest requestDTO) {
+    public UserRoleDTO create(CreateUserRoleDTO requestDTO) {
         if(userRoleRepository.existsByRole(requestDTO.role())){
             throw new ResourceAlreadyExistsException("This role already exists");
         }
@@ -47,18 +52,18 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRoleResponseDTO getById(long id) {
+    public UserRoleDTO getById(long id) {
         return null;
     }
 
     @Override
-    public List<UserRoleResponseDTO> getAllRoles() {
+    public List<UserRoleDTO> getAllRoles() {
         List<UserRole> userRoles = userRoleRepository.findAllByOrderByCreationDateAsc();
 
         return userRoleMapper.toDTOs(userRoles);
     }
 
-    public UserRoleResponseDTO assignPermission(Long roleId, Long permissionId) {
+    public void assignPermission(Long roleId, Long permissionId) {
         UserRole role = loadRoleOrException(roleId);
 
         UserPermission permission = userPermissionRepository.findById(permissionId)
@@ -66,12 +71,18 @@ public class UserRoleServiceImpl implements UserRoleService {
 
         role.getPermissions().add(permission);
         userRoleRepository.save(role);
-        return userRoleMapper.toDto(role);
     }
 
     @Override
-    public UserRoleResponseDTO removePermission(Long roleId, Long permissionId) {
-        return null;
+    public void removePermission(Long roleId, Long permissionId) {
+        UserRole role = loadRoleOrException(roleId);
+
+        UserPermission permission = userPermissionRepository.findById(permissionId)
+                .orElseThrow( () -> new ResourceNotFoundException("Permission not found"));
+
+        role.getPermissions().remove(permission);
+        userRoleRepository.save(role);
+
     }
 
     @Override
@@ -89,16 +100,16 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRoleResponseDTO update(Long roleId, UpdateUserRoleRequest updateUserRoleRequest) {
+    public UserRoleDTO update(Long roleId, UpdateUserRoleDTO updateUserRoleDTO) {
 
         UserRole userRole = loadRoleOrException(roleId);
 
-        if(userRoleRepository.existsByRole(updateUserRoleRequest.role())){
+        if(userRoleRepository.existsByRole(updateUserRoleDTO.role())){
             throw new ResourceAlreadyExistsException("This role already exists");
         }
 
-        userRole.setRole(updateUserRoleRequest.role());
-        userRole.setDescription(updateUserRoleRequest.description());
+        userRole.setRole(updateUserRoleDTO.role());
+        userRole.setDescription(updateUserRoleDTO.description());
         userRoleRepository.save(userRole);
 
         return userRoleMapper.toDto(userRole);
@@ -113,5 +124,13 @@ public class UserRoleServiceImpl implements UserRoleService {
     public UserRole loadBaseRole(){
         return userRoleRepository.findById(0L)
                 .orElseThrow(() -> new IllegalStateException("Base role missing"));
+    }
+
+    @Override
+    public List<UserPermissionDTO> getPermissionsByRole(Long roleId) {
+        UserRole userRole = userRoleRepository.findWithPermissionsById(roleId).orElseThrow(
+                () -> new ResourceNotFoundException("No User Role with that id")
+        );
+        return userRole.getPermissions().stream().map(userPermissionMapper::toDto).collect(Collectors.toList());
     }
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class    GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
@@ -28,10 +28,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceAlreadyExistsException ex, WebRequest request) {
-        ErrorResponse error = new ErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value());
+    public ResponseEntity<ErrorResponse> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, WebRequest request) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value());
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
 
@@ -53,9 +53,7 @@ public class GlobalExceptionHandler {
         body.put("detail", String.join("; ", errorMessages));
         body.put("instance", request.getDescription(false).replace("uri=", ""));
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(body);
+        return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidFormatException.class)
@@ -78,7 +76,7 @@ public class GlobalExceptionHandler {
         body.put("expectedType", expectedType);
         body.put("instance", request.getDescription(false).replace("uri=", ""));
 
-        return ResponseEntity.badRequest().body(body);
+        return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(MismatchedInputException.class)
     public ResponseEntity<Map<String,Object>> handleMismatchedInput(MismatchedInputException ex, WebRequest request) {
@@ -100,6 +98,6 @@ public class GlobalExceptionHandler {
         body.put("expectedType", expectedType);
         body.put("instance", request.getDescription(false).replace("uri=", ""));
 
-        return ResponseEntity.badRequest().body(body);
+        return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
     }
 }

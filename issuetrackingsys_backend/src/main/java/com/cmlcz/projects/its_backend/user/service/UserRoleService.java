@@ -1,27 +1,28 @@
 package com.cmlcz.projects.its_backend.user.service;
 
 import com.cmlcz.projects.its_backend.common.service.BaseService;
-import com.cmlcz.projects.its_backend.user.dto.CreateUserRoleRequest;
-import com.cmlcz.projects.its_backend.user.dto.UpdateUserRoleRequest;
-import com.cmlcz.projects.its_backend.user.dto.UserRoleResponseDTO;
+import com.cmlcz.projects.its_backend.user.dto.userPermission.UserPermissionDTO;
+import com.cmlcz.projects.its_backend.user.dto.userRole.CreateUserRoleDTO;
+import com.cmlcz.projects.its_backend.user.dto.userRole.UpdateUserRoleDTO;
+import com.cmlcz.projects.its_backend.user.dto.userRole.UserRoleDTO;
 import com.cmlcz.projects.its_backend.user.model.UserRole;
-import jakarta.validation.Valid;
 
 import java.util.List;
-import java.util.Set;
 
-public interface UserRoleService extends BaseService<CreateUserRoleRequest, UserRoleResponseDTO, Long> {
+public interface UserRoleService extends BaseService<CreateUserRoleDTO, UserRoleDTO, Long> {
 
-    UserRoleResponseDTO getById(long id);
-    List<UserRoleResponseDTO> getAllRoles();
+    UserRoleDTO getById(long id);
+    List<UserRoleDTO> getAllRoles();
 
-    UserRoleResponseDTO create(CreateUserRoleRequest requestDTO);
-    UserRoleResponseDTO update(Long id,UpdateUserRoleRequest updateUserRoleRequest);
+    UserRoleDTO create(CreateUserRoleDTO requestDTO);
+    UserRoleDTO update(Long id, UpdateUserRoleDTO updateUserRoleDTO);
     void delete(Long roleId);
 
-    UserRoleResponseDTO assignPermission(Long roleId, Long permissionId);
-    UserRoleResponseDTO removePermission(Long roleId, Long permissionId);
+    void assignPermission(Long roleId, Long permissionId);
+    void removePermission(Long roleId, Long permissionId);
 
     UserRole loadRoleOrException(Long roleId);
     UserRole loadBaseRole();
+
+    List<UserPermissionDTO> getPermissionsByRole(Long roleId);
 }

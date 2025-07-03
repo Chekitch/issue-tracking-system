@@ -16,6 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @Table(name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@DynamicUpdate
 public class User extends BaseUuidModel {
 
     @Column(nullable = false, unique = true)
