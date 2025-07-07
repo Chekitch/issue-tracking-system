@@ -16,7 +16,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
@@ -31,18 +30,12 @@ public abstract class IssueActivityMapper {
 
     @Mapping(source = "performedBy.username", target = "performed_by_username")
     public abstract IssueActivityDTO toDto(IssueActivity issueActivity);
-    public abstract List<IssueActivityDTO> toDtos(List<IssueActivity> issueActivities);
 
-//    @Mapping(source = "issue_id", target = "issue", qualifiedByName = "mapIssueById")
     @Mapping(source = "performed_by_id", target = "performedBy", qualifiedByName = "mapUserById")
     public abstract IssueActivity toEntity(IssueActivityCreateDTO issueActivityCreateDTO);
 
     public abstract void updateFromDto(IssueActivityUpdateDTO issueActivityUpdateDTO, @MappingTarget IssueActivity issueActivity);
 
-//    @Named("mapIssueById")
-//    Issue mapIssueById(UUID id){
-//        return issueRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("IssueActivity not found"));
-//    }
 
     @Named("mapUserById")
     User mapUserById(UUID id){

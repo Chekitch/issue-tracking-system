@@ -12,7 +12,7 @@ import java.util.List;
 public interface IssueStatusMapper {
 
     IssueStatusDTO toDto(IssueStatus issueStatus);
-    List<IssueStatusDTO> toDtos(List<IssueStatus> issueStatus);
+
     IssueStatus toEntity(IssueStatusRequestDTO issueStatusRequestDTO);
 
     void updateFromDto(IssueStatusRequestDTO issueStatusRequestDTO, @MappingTarget IssueStatus issueStatus);

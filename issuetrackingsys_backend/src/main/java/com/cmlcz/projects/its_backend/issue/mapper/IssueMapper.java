@@ -34,8 +34,6 @@ public abstract class IssueMapper {
 
     public abstract IssueDTO toDto(Issue issue);
 
-    public abstract List<IssueDTO> toDtos(List<Issue> issues);
-
     @Mapping(source = "statusId", target = "issueStatus", qualifiedByName = "mapIssueStatus")
     @Mapping(source = "priorityId", target = "issuePriority", qualifiedByName = "mapIssuePriority")
     @Mapping(source = "typeId", target = "issueType", qualifiedByName = "mapIssueType")

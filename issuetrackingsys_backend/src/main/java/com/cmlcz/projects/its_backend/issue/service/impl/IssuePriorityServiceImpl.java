@@ -32,7 +32,10 @@ public class IssuePriorityServiceImpl implements IssuePriorityService {
     public List<IssuePriorityDTO> getAllIssuePriorities() {
         List<IssuePriority> issues = issuePriorityRepository.getAllIssueStatusesByOrderByCreationDateAsc();
 
-        return issuePriorityMapper.toDtos(issues);
+        return issues
+                .stream()
+                .map(issuePriorityMapper::toDto)
+                .toList();
     }
 
     public IssuePriorityDTO getIssuePriorityById(Long id) {

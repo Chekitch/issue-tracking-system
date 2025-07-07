@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -51,7 +52,10 @@ public class IssueServiceImpl implements IssueService {
         }
         List<Issue> issues = issueRepository.findAllBySubProjectIdOrderByCreationDateAsc(subId);
 
-        return issueMapper.toDtos(issues);
+        return issues
+                .stream()
+                .map(issueMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -71,6 +75,13 @@ public class IssueServiceImpl implements IssueService {
         Issue issue = loadIssueOrFail(issueId);
 
         issueRepository.delete(issue);
+    }
+
+    @Override
+    public IssueDTO getIssueById(UUID issueId) {
+        Issue issue = loadIssueOrFail(issueId);
+
+        return issueMapper.toDto(issue);
     }
 
     public SubProject loadSubProjectOrFail(UUID subId) {

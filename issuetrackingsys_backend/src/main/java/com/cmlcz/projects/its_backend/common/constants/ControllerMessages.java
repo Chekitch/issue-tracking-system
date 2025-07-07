@@ -3,7 +3,7 @@ package com.cmlcz.projects.its_backend.common.constants;
 public final class ControllerMessages {
 
     public static final String CREATE_SUCCESS    = "Resource created successfully.";
-    public static final int CREATE_SUCCESS_CODE  = 201;
+    public static final int CREATE_SUCCESS_CODE  = 200;
 
     public static final String UPDATE_SUCCESS    = "Resource updated successfully.";
     public static final int UPDATE_SUCCESS_CODE  = 200;

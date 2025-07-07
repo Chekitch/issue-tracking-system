@@ -42,6 +42,14 @@ public class IssueController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/issues/{issueId}")
+    public ResponseEntity<ApiResponse<IssueDTO>> getIssueById(@PathVariable UUID issueId){
+        IssueDTO issueDTO = issueService.getIssueById(issueId);
+        ApiResponse<IssueDTO> response = new ApiResponse<>
+                (issueDTO, ControllerMessages.FETCH_SUCCESS, ControllerMessages.FETCH_SUCCESS_CODE);
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/issues/{issueId}")
     public ResponseEntity<ApiResponse<IssueDTO>> updateIssue(@PathVariable UUID issueId, @RequestBody @Valid IssueUpdateDTO issueUpdateDTO){
         IssueDTO issueDTO = issueService.updateIssue(issueId, issueUpdateDTO);

@@ -16,4 +16,5 @@ public interface IssueService extends CreatedByService<IssueCreateDTO, IssueDTO,
     IssueDTO createIssue(UUID subId, IssueCreateDTO issueCreateDTO);
     IssueDTO updateIssue(UUID issueId, IssueUpdateDTO issueUpdateDTO);
     void deleteIssue(UUID issueId);
+    IssueDTO getIssueById(UUID issueId);
 }

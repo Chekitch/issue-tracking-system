@@ -10,9 +10,9 @@ import java.util.UUID;
 
 public interface UserService extends BaseService<CreateUserDTO, UserSummaryDTO, UUID> {
 
-    UserSummaryDTO getUserById(UUID roleId);
-    UserSummaryDTO create(CreateUserDTO requestDTO);
     List<UserSummaryDTO> getAllUsers();
+    UserSummaryDTO create(CreateUserDTO requestDTO);
+    UserSummaryDTO getUserById(UUID roleId);
     UserSummaryDTO updateUser(UUID roleId, UpdateUserDTO updateUserDTO);
     void deleteUser(UUID roleId);
 }

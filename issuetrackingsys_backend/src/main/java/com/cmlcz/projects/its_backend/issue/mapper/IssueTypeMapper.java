@@ -12,7 +12,7 @@ import java.util.List;
 public interface IssueTypeMapper {
 
     IssueTypeDTO toDTO(IssueType issueType);
-    List<IssueTypeDTO> toDTOs(List<IssueType> issueTypes);
+
     IssueType toEntity(IssueTypeRequestDTO issueTypeRequestDTO);
 
     void updateFromDto(IssueTypeRequestDTO issueTypeRequestDTO, @MappingTarget IssueType issueType);

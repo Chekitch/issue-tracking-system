@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,17 +37,17 @@ public class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
     }
 
-    public Collection<UserSummaryDTO> findAll() {
-        return List.of();
+    @Override
+    public List<UserSummaryDTO> getAllUsers() {
+        List<User> users = userRepository.findAllWithRolesByOrderByCreationDateAsc();
+
+        return users
+                .stream()
+                .map(userMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public UserSummaryDTO getUserById(UUID id) {
-        User user = loadUserOrFail(id);
-
-        return userMapper.toDTO(user);
-    }
-
     public UserSummaryDTO create(CreateUserDTO userRequestDTO) {
 
         if(!userRoleRepository.existsById(userRequestDTO.roleId())){
@@ -68,30 +67,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserSummaryDTO> getAllUsers() {
-        List<User> users = userRepository.findAllWithRolesByOrderByCreationDateAsc();
+    public UserSummaryDTO getUserById(UUID id) {
+        User user = loadUserOrFail(id);
 
-        return userMapper.toDTOs(users);
-
+        return userMapper.toDTO(user);
     }
 
     @Override
     public UserSummaryDTO updateUser(UUID id, UpdateUserDTO updateUserDTO) {
-        if(! userRepository.getReferenceById(id).getUsername().equalsIgnoreCase(updateUserDTO.username())
+        User user = loadUserOrFail(id);
+        if(! user.getUsername().equalsIgnoreCase(updateUserDTO.username())
                 && userRepository.existsByUsernameIgnoreCase(updateUserDTO.username()) ){
             throw new ResourceAlreadyExistsException("Username is already used");
         }
 
-        User user = loadUserOrFail(id);
+        UserRole userRole = userRoleRepository.findWithPermissionsById(updateUserDTO.roleId()).orElseThrow(
+                () -> new ResourceNotFoundException("Role not found")
+        );
+
         user.setUsername(updateUserDTO.username());
         user.setFullName(updateUserDTO.fullName());
+
         if(updateUserDTO.password() != null && !updateUserDTO.password().equalsIgnoreCase("")){
             String hashedPassword = passwordEncoder.encode(updateUserDTO.password());
             user.setHashedPassword(hashedPassword);
         }
-        UserRole userRole = userRoleRepository.findWithPermissionsById(updateUserDTO.roleId()).orElseThrow(
-                () -> new ResourceNotFoundException("Role not found")
-        );
 
         user.setRole(userRole);
 
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public User loadUserOrFail(UUID id){
+    private User loadUserOrFail(UUID id){
         return userRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));

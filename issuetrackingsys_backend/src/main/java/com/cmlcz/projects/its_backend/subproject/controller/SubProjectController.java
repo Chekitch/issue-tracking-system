@@ -26,15 +26,6 @@ public class SubProjectController {
         this.subProjectService = subProjectService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<SubProjectResponseDTO>> getSubProjectById(@PathVariable UUID id) {
-        SubProjectResponseDTO subProjectResponseDTO = subProjectService.findById(id);
-        ApiResponse<SubProjectResponseDTO> response = new ApiResponse<>
-                (subProjectResponseDTO, ControllerMessages.FETCH_SUCCESS, ControllerMessages.CREATE_SUCCESS_CODE);
-        return ResponseEntity.ok(response);
-
-    }
-
     @GetMapping()
     public ResponseEntity<ApiResponse<List<SubProjectResponseDTO>>> getSubProjectsByParent(@RequestParam UUID parentId) {
 
@@ -53,6 +44,15 @@ public class SubProjectController {
                 (subProjectResponseDTO, ControllerMessages.CREATE_SUCCESS, ControllerMessages.CREATE_SUCCESS_CODE);
 
         return ResponseEntity.ok(apiResponse);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<SubProjectResponseDTO>> getSubProjectById(@PathVariable UUID id) {
+        SubProjectResponseDTO subProjectResponseDTO = subProjectService.findById(id);
+        ApiResponse<SubProjectResponseDTO> response = new ApiResponse<>
+                (subProjectResponseDTO, ControllerMessages.FETCH_SUCCESS, ControllerMessages.CREATE_SUCCESS_CODE);
+        return ResponseEntity.ok(response);
 
     }
 

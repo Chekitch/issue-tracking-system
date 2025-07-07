@@ -9,9 +9,7 @@ public record CommentRequestDTO(
         @NotBlank(message = "Content must not be blank")
         String content,
         @NotNull(message = "User ID must not be null")
-        UUID userId,
-        @NotNull(message = "Issue ID must not be null")
-        UUID issueId
+        UUID userId
 ) {
 
 }

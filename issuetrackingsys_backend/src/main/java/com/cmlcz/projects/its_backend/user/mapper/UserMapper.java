@@ -33,6 +33,7 @@ public interface UserMapper {
                   @Context PasswordEncoder passwordEncoder);
 
 
+
     @Named("mapRole")
     default UserRole mapRole(Long roleId,
                              @Context UserRoleRepository userRoleRepository) {

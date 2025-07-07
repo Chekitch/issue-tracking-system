@@ -10,13 +10,11 @@ import com.cmlcz.projects.its_backend.subproject.mapper.SubProjectMapper;
 import com.cmlcz.projects.its_backend.subproject.model.SubProject;
 import com.cmlcz.projects.its_backend.subproject.repository.SubProjectRepository;
 import com.cmlcz.projects.its_backend.subproject.service.SubProjectService;
-import com.cmlcz.projects.its_backend.user.model.User;
 import com.cmlcz.projects.its_backend.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,16 +35,7 @@ public class SubProjectServiceImpl implements SubProjectService {
         this.userRepository = userRepository;
     }
 
-    @Transactional(readOnly = true)
-    public SubProjectResponseDTO findById(UUID id) {
-        SubProject subProject = subProjectRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Subproject not found")
-        );
-
-        return subProjectMapper.toDto(subProject);
-    }
-
-    @Transactional
+    @Override
     public List<SubProjectResponseDTO> findByParentProjectId(UUID parentId) {
 
         if(!parentProjectRepository.existsById(parentId)){
@@ -55,27 +44,29 @@ public class SubProjectServiceImpl implements SubProjectService {
 
         List<SubProject> subProjects = subProjectRepository.findAllByParentProjectIdOrderByCreationDateAsc(parentId);
 
-        ArrayList<SubProjectResponseDTO> subProjectResponseDTOS = new ArrayList<>();
-
-        for(SubProject subProject : subProjects){
-            subProjectResponseDTOS.add(subProjectMapper.toDto(subProject));
-        }
-
-        return subProjectResponseDTOS;
+        return subProjects
+                .stream()
+                .map(subProjectMapper::toDto)
+                .toList();
     }
 
-    @Transactional
+    @Override
+    public SubProjectResponseDTO findById(UUID id) {
+        SubProject subProject = loadSubProjectOrFail(id);
+
+        return subProjectMapper.toDto(subProject);
+    }
+
+    @Override
     public SubProjectResponseDTO createUnderParent(SubProjectCreateDTO subProjectRequest, UUID parentId) {
 
-        if(!parentProjectRepository.existsById(parentId)) throw new ResourceNotFoundException("Parent project not found");
+        ParentProject parentProject = parentProjectRepository.findById(parentId).orElseThrow(
+                () -> new ResourceNotFoundException("Parent project not found"));
+
         if(!userRepository.existsById(subProjectRequest.createdById())) throw new ResourceNotFoundException("User not found");
 
         SubProject subProject = subProjectMapper.toEntity(subProjectRequest, parentId);
 
-        User user = userRepository.getReferenceById(subProjectRequest.createdById());
-        ParentProject parentProject = parentProjectRepository.getReferenceById(parentId);
-
-        subProject.setCreatedBy(user);
         subProject.setParentProject(parentProject);
 
         subProjectRepository.save(subProject);
@@ -84,26 +75,27 @@ public class SubProjectServiceImpl implements SubProjectService {
     }
 
     @Override
-    @Transactional
     public SubProjectResponseDTO update(UUID id, SubProjectUpdateDTO subProjectUpdateDTO) {
-        SubProject subProject = subProjectRepository.findById(id)
-                .orElseThrow( () -> new ResourceNotFoundException("Subproject not found"));
 
-        subProject.setProjectName(subProjectUpdateDTO.projectName());
-        subProject.setDescription(subProjectUpdateDTO.description());
+        SubProject subProject = loadSubProjectOrFail(id);
 
-        subProjectRepository.save(subProject);
+        subProjectMapper.updateFromDto(subProjectUpdateDTO, subProject);
 
         return subProjectMapper.toDto(subProject);
     }
 
     @Override
-    @Transactional
     public void deleteById(UUID id) {
         SubProject subProject = subProjectRepository.findById(id)
                 .orElseThrow( () -> new ResourceNotFoundException("Subproject not found"));
 
         subProjectRepository.delete(subProject);
 
+    }
+
+    public SubProject loadSubProjectOrFail(UUID id) {
+        return subProjectRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Subproject not found")
+        );
     }
 }

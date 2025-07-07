@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public record CommentResponseDTO(
         Long id,
-        String content,
         LocalDateTime createdAt,
+        String content,
 
         UUID authorId,
         String authorUsername

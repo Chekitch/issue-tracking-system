@@ -12,7 +12,6 @@ import java.util.List;
 public interface IssuePriorityMapper {
 
     IssuePriorityDTO toDto(IssuePriority issuePriority);
-    List<IssuePriorityDTO> toDtos(List<IssuePriority> issuePriority);
 
     IssuePriority toEntity(IssuePriorityRequestDTO issuePriorityRequestDTO);
 

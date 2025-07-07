@@ -57,7 +57,7 @@ public class Issue extends BaseUuidModel {
 
 //    private LocalDateTime dueDate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "issue")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
 //    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

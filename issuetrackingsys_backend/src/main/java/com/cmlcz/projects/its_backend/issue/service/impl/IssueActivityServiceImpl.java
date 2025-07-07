@@ -41,7 +41,10 @@ public class IssueActivityServiceImpl implements IssueActivityService {
         List<IssueActivity> issueActivities = issueActivityRepository.
                                                 getIssueActivitiesByIssueIdOrderByCreationDateAsc(issueId);
 
-        return issueActivityMapper.toDtos(issueActivities);
+        return issueActivities
+                .stream()
+                .map(issueActivityMapper::toDto)
+                .toList();
     }
 
     @Override

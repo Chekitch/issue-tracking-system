@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface IssueActivityRepository extends JpaRepository<IssueActivity, Long> {
 
-    List<IssueActivity> getIssueActivitiesByIssueIdOrderByCreationDateAsc(UUID issueİd);
+    List<IssueActivity> getIssueActivitiesByIssueIdOrderByCreationDateAsc(UUID issueId);
     Optional<IssueActivity> getIssueActivityByIdAndIssueId(Long id, UUID issue_id);
 
 }

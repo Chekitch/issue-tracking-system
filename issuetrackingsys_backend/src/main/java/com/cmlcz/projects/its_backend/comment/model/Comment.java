@@ -13,7 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 public class Comment extends BaseModel {
 
-
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

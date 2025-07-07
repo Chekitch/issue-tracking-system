@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,8 +31,11 @@ public class IssueStatusServiceImpl implements IssueStatusService {
     @Override
     public List<IssueStatusDTO> getAllIssueStatuses() {
 
-        List<IssueStatus> issueStatusList = issueStatusRepository.getAllIssueStatusesByOrderByCreationDateAsc();
-        return issueStatusMapper.toDtos(issueStatusList);
+        List<IssueStatus> issueStatuses = issueStatusRepository.getAllIssueStatusesByOrderByCreationDateAsc();
+        return issueStatuses
+                .stream()
+                .map(issueStatusMapper::toDto)
+                .toList();
     }
 
     @Override

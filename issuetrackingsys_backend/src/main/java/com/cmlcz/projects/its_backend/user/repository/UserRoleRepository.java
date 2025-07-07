@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
-    Optional<UserRole> findById(Long id);
 
     @EntityGraph(attributePaths = "permissions")
     Optional<UserRole> findWithPermissionsById(@Param("id") Long id);
     List<UserRole> findAllByOrderByCreationDateAsc();
+    List<UserRole> findByPermissionsId(Long id);
 
     @Query("select r from UserRole r left join fetch r.permissions")
     List<UserRole> findAllWithPermissions();
@@ -24,4 +24,5 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     UserRole findWithPermissions(@Param("id") Long id);
 
     boolean existsByRoleIgnoreCase(String role);
+
 }

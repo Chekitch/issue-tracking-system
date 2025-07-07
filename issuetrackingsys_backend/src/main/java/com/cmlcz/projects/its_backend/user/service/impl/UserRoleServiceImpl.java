@@ -8,6 +8,7 @@ import com.cmlcz.projects.its_backend.user.dto.userRole.UpdateUserRoleDTO;
 import com.cmlcz.projects.its_backend.user.dto.userRole.UserRoleDTO;
 import com.cmlcz.projects.its_backend.user.mapper.UserPermissionMapper;
 import com.cmlcz.projects.its_backend.user.mapper.UserRoleMapper;
+import com.cmlcz.projects.its_backend.user.model.User;
 import com.cmlcz.projects.its_backend.user.model.UserPermission;
 import com.cmlcz.projects.its_backend.user.model.UserRole;
 import com.cmlcz.projects.its_backend.user.repository.UserPermissionRepository;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,6 +40,16 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
+    public List<UserRoleDTO> getAllRoles() {
+        List<UserRole> userRoles = userRoleRepository.findAllByOrderByCreationDateAsc();
+
+        return userRoles
+                .stream()
+                .map(userRoleMapper::toDto)
+                .toList();
+    }
+
+    @Override
     public UserRoleDTO create(CreateUserRoleDTO requestDTO) {
         if(userRoleRepository.existsByRoleIgnoreCase(requestDTO.role())){
             throw new ResourceAlreadyExistsException("This role already exists");
@@ -53,21 +63,20 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public UserRoleDTO getById(long id) {
-        return null;
+        UserRole userRole = loadRoleOrException(id);
+        return userRoleMapper.toDto(userRole);
     }
 
     @Override
-    public List<UserRoleDTO> getAllRoles() {
-        List<UserRole> userRoles = userRoleRepository.findAllByOrderByCreationDateAsc();
-
-        return userRoleMapper.toDTOs(userRoles);
-    }
-
     public void assignPermission(Long roleId, Long permissionId) {
         UserRole role = loadRoleOrException(roleId);
 
         UserPermission permission = userPermissionRepository.findById(permissionId)
                 .orElseThrow( () -> new ResourceNotFoundException("Permission not found"));
+
+        if(role.getPermissions().contains(permission)){
+            throw new ResourceAlreadyExistsException("This permission is already assigned");
+        }
 
         role.getPermissions().add(permission);
         userRoleRepository.save(role);
@@ -79,6 +88,10 @@ public class UserRoleServiceImpl implements UserRoleService {
 
         UserPermission permission = userPermissionRepository.findById(permissionId)
                 .orElseThrow( () -> new ResourceNotFoundException("Permission not found"));
+
+        if(!role.getPermissions().contains(permission)){
+            throw new ResourceNotFoundException("This permission is not assigned");
+        }
 
         role.getPermissions().remove(permission);
         userRoleRepository.save(role);
@@ -108,9 +121,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             throw new ResourceAlreadyExistsException("This role already exists");
         }
 
-        userRole.setRole(updateUserRoleDTO.role());
-        userRole.setDescription(updateUserRoleDTO.description());
-        userRoleRepository.save(userRole);
+        userRoleMapper.mapFromDto(updateUserRoleDTO, userRole);
 
         return userRoleMapper.toDto(userRole);
     }
@@ -131,6 +142,6 @@ public class UserRoleServiceImpl implements UserRoleService {
         UserRole userRole = userRoleRepository.findWithPermissionsById(roleId).orElseThrow(
                 () -> new ResourceNotFoundException("No User Role with that id")
         );
-        return userRole.getPermissions().stream().map(userPermissionMapper::toDto).collect(Collectors.toList());
+        return userRole.getPermissions().stream().map(userPermissionMapper::toDto).toList();
     }
 }

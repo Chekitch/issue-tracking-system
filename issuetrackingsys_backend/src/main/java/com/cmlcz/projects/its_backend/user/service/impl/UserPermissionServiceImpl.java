@@ -1,6 +1,7 @@
 package com.cmlcz.projects.its_backend.user.service.impl;
 
 import com.cmlcz.projects.its_backend.common.exception.ResourceAlreadyExistsException;
+import com.cmlcz.projects.its_backend.common.exception.ResourceNotFoundException;
 import com.cmlcz.projects.its_backend.user.dto.userPermission.CreateUserPermissionDTO;
 import com.cmlcz.projects.its_backend.user.dto.userPermission.UpdateUserPermissionDTO;
 import com.cmlcz.projects.its_backend.user.dto.userPermission.UserPermissionDTO;
@@ -14,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserPermissionServiceImpl implements UserPermissionService {
 
     private final UserRoleRepository userRoleRepository;
@@ -28,7 +31,18 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    @Transactional
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserPermissionDTO> getAllPermissions() {
+
+        List<UserPermission> userPermissions = userPermissionRepository.findAllByOrderByCreationDateAsc();
+
+        return userPermissions
+                .stream()
+                .map(userPermissionMapper::toDto)
+                .toList();
+    }
+
     @Override
     public UserPermissionDTO createPermission(CreateUserPermissionDTO userPermissionRequest) {
 
@@ -43,17 +57,8 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         return userPermissionMapper.toDto(userPermission);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<UserPermissionDTO> getAllPermissions() {
-
-       List<UserPermission> userPermissions = userPermissionRepository.findAllByOrderByCreationDateAsc();
-
-       return userPermissionMapper.toDtos(userPermissions);
-    }
 
     @Override
-    @Transactional
     public UserPermissionDTO getById(Long id) {
         UserPermission userPermission = getPermissionOrFail(id);
 
@@ -61,7 +66,6 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     }
 
     @Override
-    @Transactional
     public UserPermissionDTO update(UpdateUserPermissionDTO updateUserPermissionDTO, Long id) {
         UserPermission userPermission = getPermissionOrFail(id);
 
@@ -75,21 +79,23 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         return userPermissionMapper.toDto(userPermission);
     }
 
-    @Transactional
+    @Override
     public void delete(Long id){
         UserPermission userPermission = getPermissionOrFail(id);
 
-        List<UserRole> roles = userRoleRepository.findAllWithPermissions();
+        List<UserRole> rolesWithPermission = userRoleRepository.findByPermissionsId(id);
 
-        roles.stream()
-                .filter(role -> role.getPermissions().removeIf(p -> p.getId().equals(id)))
-                .forEach(userRoleRepository::save);
+        rolesWithPermission.forEach(role -> {
+            role.getPermissions().removeIf(p -> p.getId().equals(id));
+            userRoleRepository.save(role);
+        });
 
         userPermissionRepository.delete(userPermission);
 
     }
 
     public UserPermission getPermissionOrFail(Long id){
-        return userPermissionRepository.getReferenceById(id);
+        return userPermissionRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Permission Not Found"));
     }
 }
