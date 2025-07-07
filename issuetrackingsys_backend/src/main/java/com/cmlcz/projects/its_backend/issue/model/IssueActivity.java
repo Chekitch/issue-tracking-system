@@ -12,16 +12,17 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class IssueActivityLog extends BaseModel {
+public class IssueActivity extends BaseModel {
 
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="performed_by")
-    private User performedBy;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="issue_id", nullable = false)
     @JsonIgnore
     private Issue issue;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="performed_by_id")
+    private User performedBy;
+
 }

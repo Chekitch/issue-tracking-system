@@ -1,0 +1,76 @@
+.ip-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ip-title {
+  font-size: 1.5rem !important;
+  font-weight: 500 !important;
+  margin-bottom: 2rem !important;
+  color: #f1f5f9 !important;
+}
+
+.ip-header-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.ip-create-btn {
+  background-color: #1e293b !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.ip-create-btn:hover {
+  background-color: #334155 !important;
+}
+
+.ip-table-container {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.ip-table-header {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.ip-table-cell {
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.ip-edit-btn {
+  background-color: transparent !important;
+  color: #94a3b8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  text-transform: none !important;
+  min-width: 60px !important;
+}
+
+.ip-edit-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.ip-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.ip-error {
+  color: #ef4444;
+  padding: 1rem;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 4px;
+  background-color: rgba(239, 68, 68, 0.05);
+}

@@ -26,7 +26,7 @@ axiosInstance.interceptors.request.use(
         if (authToken) {
             if (isTokenExpired(authToken)) {
                 store.dispatch(logout());
-                return Promise.reject(new Error('Session expired'));
+                return Promise.reject(new Error('Session is expired'));
             }
             config.headers.Authorization = `Bearer ${authToken}`;
         }
@@ -38,8 +38,10 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => {
         const wrapper = response.data as ApiResponse<any> | ErrorResponse;
+    
         console.log(wrapper);
         if ('data' in wrapper){
+            console.log(wrapper.data);
             return wrapper.data;
         }else{
             return Promise.reject(new Error(wrapper.message));

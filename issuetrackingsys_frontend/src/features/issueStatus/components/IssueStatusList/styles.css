@@ -1,0 +1,61 @@
+.is-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.is-title {
+  font-size: 1.5rem !important;
+  font-weight: 500 !important;
+  margin-bottom: 2rem !important;
+  color: #f1f5f9 !important;
+}
+
+.is-header-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.is-create-btn {
+  background-color: #1e293b !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.is-create-btn:hover {
+  background-color: #334155 !important;
+}
+
+.is-table-container {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.is-table-header {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.is-table-cell {
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.is-edit-btn {
+  background-color: transparent !important;
+  color: #94a3b8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  text-transform: none !important;
+  min-width: 60px !important;
+}
+
+.is-edit-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}

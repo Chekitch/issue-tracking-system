@@ -23,6 +23,5 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     @Query("select r from UserRole r left join fetch r.permissions where r.id = :id")
     UserRole findWithPermissions(@Param("id") Long id);
 
-    boolean existsByRole(String role);
-
+    boolean existsByRoleIgnoreCase(String role);
 }

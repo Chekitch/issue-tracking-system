@@ -7,13 +7,15 @@ import CreateUserModal from "../CreateUser";
 import EditUserModal from "../EditUser";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { logout } from "../../../../core/auth/store/authSlice";
+import { ErrorDisplay, LoadingIndicator, EmptyState } from "../../../../utils/commonFunctions";
+import { useModal } from '../../../../utils/hooks';
 
 function UserList(){
     const[users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const createModal = useModal();
+    const editModal = useModal();
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const userId = useAppSelector(store => store.auth.userId);
     const dispatch = useAppDispatch();
@@ -36,7 +38,7 @@ function UserList(){
     }
 
     const handleCreateUser = () => {
-        setIsCreateModalOpen(true);
+        createModal.openModal();
     }
     const handleUserCreated = (user: User) => {
         setUsers([...users, user]);
@@ -44,7 +46,7 @@ function UserList(){
 
     const handleEditUser = (user: User) => {
       setSelectedUser(user);
-      setIsEditModalOpen(true);
+      editModal.openModal();
     }
 
     const handleUserUpdated = (updated : User) => {
@@ -58,15 +60,11 @@ function UserList(){
 
 
     if(loading){
-        return (
-            <Box className="loading-container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <CircularProgress sx={{ color: '#4ECDC4' }} size={60} />
-            </Box>
-        );
+        return <LoadingIndicator />;
     }
 
     if(error){
-        return <div className="error">{error}</div>;
+        return <ErrorDisplay error={error} />;
     }
 
     return (
@@ -99,7 +97,7 @@ function UserList(){
           <TableBody>
             {users.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} align="center">No users found</TableCell>
+                <TableCell colSpan={5} align="center"><EmptyState message="No users found" /></TableCell>
               </TableRow>
             ) : (
               users.map((user : User) => (
@@ -122,15 +120,15 @@ function UserList(){
       </TableContainer>
 
       <CreateUserModal
-        open={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        open={createModal.open}
+        onClose={createModal.closeModal}
         onUserCreated={handleUserCreated}
       />
 
       {selectedUser && (
         <EditUserModal
-          open={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
+          open={editModal.open}
+          onClose={editModal.closeModal}
           user={selectedUser}
           onUserUpdated={handleUserUpdated}
           onUserDeleted={handleUserDeleted}

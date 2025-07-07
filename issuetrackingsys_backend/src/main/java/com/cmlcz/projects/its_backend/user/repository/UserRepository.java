@@ -15,7 +15,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsById(UUID id);
 
-    boolean existsByUsername(String username);
+    boolean existsByUsernameIgnoreCase(String username);
+
     Optional<User> findByUsername(String username);
 
     @Query("SELECT u from User u JOIN fetch u.role order by u.creationDate asc")

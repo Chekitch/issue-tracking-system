@@ -1,68 +1,67 @@
-.permissions-container {
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 2rem;
+.perm-container {
+max-width: 1500px;
+margin: 0 auto;
+padding: 2rem;
 }
 
-.page-title {
-  color: #f5f5f5 !important;
-  margin-bottom: 1.5rem !important;
-  font-size: 1.75rem !important;
+.perm-title {
+color: #f5f5f5 !important;
+margin-bottom: 1.5rem !important;
+font-size: 1.75rem !important;
 }
 
-.header-container {
-  margin-bottom: 1.5rem;
+.perm-header-container {
+margin-bottom: 1.5rem;
 }
 
-.create-permission-btn {
-  background-color: #366461 !important;
-  color: #F5F5F5 !important;
-  border: 1px solid #455D7A !important;
+.perm-create-btn {
+background-color: #366461 !important;
+color: #F5F5F5 !important;
+border: 1px solid #455D7A !important;
 }
 
-.create-permission-btn:hover {
-  background-color: #074743 !important;
+.perm-create-btn:hover {
+background-color: #074743 !important;
 }
 
-.permission-table-container {
-  background-color: #2c3e50 !important;
-  border-radius: 8px !important;
+.perm-table-container {
+background-color: #2c3e50 !important;
+border-radius: 8px !important;
 }
 
-.permission-table-container th {
-  background-color: #233142 !important;
-  color: #f5f5f5 !important;
-  font-weight: bold !important;
+.perm-table-header {
+background-color: #233142 !important;
+color: #f5f5f5 !important;
+font-weight: bold !important;
 }
 
-.permission-table-container td {
-  color: #e0e0e0 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+.perm-table-cell {
+color: #e0e0e0 !important;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-.edit-btn {
-  color: #4ECDC4 !important;
-  border: 1px solid #4ECDC4 !important;
-  background-color: transparent !important;
+.perm-edit-btn {
+color: #4ECDC4 !important;
+border: 1px solid #4ECDC4 !important;
+background-color: transparent !important;
 }
 
-.edit-btn:hover {
-  background-color: rgba(78, 205, 196, 0.1) !important;
+.perm-edit-btn:hover {
+background-color: rgba(78, 205, 196, 0.1) !important;
 }
 
-.error {
-  background-color: #3a1f1f;
-  color: #f95959;
-  padding: 1rem;
-  border-radius: 5px;
-  text-align: center;
-  margin-top: 1rem;
+.perm-error {
+background-color: #3a1f1f;
+color: #f95959;
+padding: 1rem;
+border-radius: 5px;
+text-align: center;
+margin-top: 1rem;
 }
 
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
+.perm-loading {
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 400px;
 }
-

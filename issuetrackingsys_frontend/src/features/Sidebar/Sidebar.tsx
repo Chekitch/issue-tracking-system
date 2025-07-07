@@ -18,10 +18,15 @@ import {
   ExpandLess,
   ExpandMore,
   People,
+  PriorityHigh,
+  PlaylistAddCheck,
 } from '@mui/icons-material';
 import SecurityIcon from '@mui/icons-material/Security';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LockIcon from '@mui/icons-material/Lock';
+import FlagIcon from '@mui/icons-material/Flag';
+import CategoryIcon from '@mui/icons-material/Category'; 
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../../store/hooks';
 import { logout } from '../../core/auth/store/authSlice';
@@ -29,31 +34,32 @@ import { logout } from '../../core/auth/store/authSlice';
 interface MenuItem {
   id: string;
   text: string;
-  icon: React.ReactNode;
-  path: string;
+  icon?: React.ReactNode;
+  path?: string;
   children?: MenuItem[];
 }
 
 const menuItems: MenuItem[] = [
   { id: 'dashboard', text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
   { id: 'projects', text: 'Projects',  icon: <Folder />,    path: '/projects'  },
-  { 
-    id: 'users',
-    text: 'Users',  
-    icon: <People />,   
-    path: '/users',
-    children:[
-      { id: 'roles', text: 'Roles', path: '/roles', icon: <SecurityIcon/>},
-      { id: 'permissions', text: 'Permissions', path: '/permissions', icon: <LockIcon/>}
+  { id: 'users',text: 'Users',  icon: <People />, path: '/users', children: [
+        { id: 'roles', text: 'Roles', path: '/roles', icon: <SecurityIcon/>},
+        { id: 'permissions', text: 'Permissions', path: '/permissions', icon: <LockIcon/>}
     ]
   },
+  { id: 'admin', text: 'Admin', icon: <AdminPanelSettingsIcon/> , children:[
+    { id: 'priorities', text: 'Issue Priority', path: '/issue-priorities', icon: <PriorityHigh/>},
+    { id: 'types', text: 'Issue Type', path: '/issue-types', icon: <CategoryIcon/>},
+    { id: 'statuses', text: 'Issue Status', path: '/issue-statuses', icon: <PlaylistAddCheck/>}
+  ]
+}
 ];
 
-interface SidebarProps {
+interface Props {
   drawerWidth?: number;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ drawerWidth = 240 }) => {
+const Sidebar = ({ drawerWidth = 240 } : Props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -82,8 +88,8 @@ const Sidebar: React.FC<SidebarProps> = ({ drawerWidth = 240 }) => {
     navigate('/');
   };
 
-  const handleNavigate = (path: string) => {
-    navigate(path);
+  const handleNavigate = (path: string | undefined) => {
+    if(typeof path == 'string') navigate(path);
   };
 
   const toggleSubmenu = (itemId: string, event: React.MouseEvent) => {
@@ -149,25 +155,27 @@ const Sidebar: React.FC<SidebarProps> = ({ drawerWidth = 240 }) => {
               {item.children && (
                 <Collapse in={openMenus[item.id]} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
-                    {item.children.map(child => (
-                      <ListItemButton
-                        key={child.id}
-                        component={Link}
-                        to={child.path}
-                        sx={{ 
-                          pl: 4,
-                          mx: 1,
-                          borderRadius: '4px',
-                          bgcolor: location.pathname === child.path ? 'rgba(78, 205, 196, 0.1)' : 'transparent',
-                          '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' }
-                        }}
-                      >
-                        <ListItemIcon sx={{ color: '#4ECDC4', minWidth: '40px' }}>
-                          {child.icon}
-                        </ListItemIcon>
-                        <ListItemText primary={child.text} />
-                      </ListItemButton>
-                    ))}
+                    {item.children.map(child =>
+                      child.path ? (
+                        <ListItemButton
+                          key={child.id}
+                          component={Link}
+                          to={child.path}
+                          sx={{ 
+                            pl: 4,
+                            mx: 1,
+                            borderRadius: '4px',
+                            bgcolor: location.pathname === child.path ? 'rgba(78, 205, 196, 0.1)' : 'transparent',
+                            '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' }
+                          }}
+                        >
+                          <ListItemIcon sx={{ color: '#4ECDC4', minWidth: '40px' }}>
+                            {child.icon}
+                          </ListItemIcon>
+                          <ListItemText primary={child.text} />
+                        </ListItemButton>
+                      ) : null
+                    )}
                   </List>
                 </Collapse>
               )}

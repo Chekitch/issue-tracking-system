@@ -113,7 +113,7 @@ const EditParentProjectModal = ({ open, onClose, projectId, currentName, current
         fullWidth
         slotProps={{
           paper:{
-            sx: {bgColor: '#2C3E50'}
+            sx: {bgcolor: '#2C3E50'}
           }
         }}
       >
@@ -194,7 +194,7 @@ const EditParentProjectModal = ({ open, onClose, projectId, currentName, current
         onClose={handleCancelDelete}
         slotProps={{
           paper:{
-            sx: { bgColor: '#2C3E50', color: '#F5F5F5'}
+            sx: { bgcolor: '#2C3E50', color: '#F5F5F5'}
           }
         }}
       >

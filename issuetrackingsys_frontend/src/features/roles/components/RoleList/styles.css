@@ -1,26 +1,26 @@
-.roles-container {
+.role-container {
   max-width: 1500px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.page-title {
+.role-title {
   color: #f5f5f5 !important;
   margin-bottom: 1.5rem !important;
   font-size: 1.75rem !important;
 }
 
-.header-container {
+.role-header-container {
   margin-bottom: 1.5rem;
 }
 
-.create-role-btn {
+.role-create-btn {
   background-color: #366461 !important;
   color: #F5F5F5 !important;
   border: 1px solid #455D7A !important;
 }
 
-.create-role-btn:hover {
+.role-create-btn:hover {
   background-color: #074743 !important;
 }
 
@@ -29,28 +29,40 @@
   border-radius: 8px !important;
 }
 
-.role-table-container th {
+.role-table-header {
   background-color: #233142 !important;
   color: #f5f5f5 !important;
   font-weight: bold !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-.role-table-container td {
+.role-table-cell {
   color: #e0e0e0 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-.edit-btn {
+.role-edit-btn {
   color: #4ECDC4 !important;
   border: 1px solid #4ECDC4 !important;
   background-color: transparent !important;
 }
 
-.edit-btn:hover {
+.role-edit-btn:hover {
   background-color: rgba(78, 205, 196, 0.1) !important;
 }
 
-.error {
+.role-permissions-btn {
+  color: #4ECDC4 !important;
+  border: 1px solid #4ECDC4 !important;
+  background-color: transparent !important;
+  margin-left: 10px !important;
+}
+
+.role-permissions-btn:hover {
+  background-color: rgba(78, 205, 196, 0.1) !important;
+}
+
+.role-error {
   background-color: #3a1f1f;
   color: #f95959;
   padding: 1rem;
@@ -59,20 +71,9 @@
   margin-top: 1rem;
 }
 
-.loading-container {
+.role-loading {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 400px;
-}
-
-.manage-permissions-btn {
-  color: #4ECDC4 !important;
-  border: 1px solid #4ECDC4 !important;
-  background-color: transparent !important;
-  margin-left: 10px !important;
-}
-
-.manage-permissions-btn:hover {
-  background-color: rgba(78, 205, 196, 0.1) !important;
 }

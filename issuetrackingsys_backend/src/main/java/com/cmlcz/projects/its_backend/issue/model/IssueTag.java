@@ -12,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 public class IssueTag extends BaseModel {
 
-    @JoinColumn(name="tag_name")
-    private String tagName;
+    private String name;
 
 }

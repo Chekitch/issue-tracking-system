@@ -32,7 +32,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CommentResponseDTO>> save(@RequestBody @Valid CommentRequestDTO commentRequestDTO) {
+    public ResponseEntity<ApiResponse<CommentResponseDTO>> createComment(@RequestBody @Valid CommentRequestDTO commentRequestDTO) {
 
 
         CommentResponseDTO commentResponseDTO = commentService.save(commentRequestDTO);

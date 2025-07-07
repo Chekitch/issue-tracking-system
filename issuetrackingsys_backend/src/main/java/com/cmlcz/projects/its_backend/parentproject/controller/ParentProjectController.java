@@ -31,7 +31,6 @@ public class ParentProjectController extends BaseController<ParentProjectCreateD
     }
 
     @GetMapping
-    @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse<List<ParentProjectResponseDTO>>> getAllParentProjects(){
         List<ParentProjectResponseDTO> responseDTOs = parentProjectService.findAll();
         ApiResponse<List<ParentProjectResponseDTO>> response = new ApiResponse<>(responseDTOs, "Fetched All Parent Projects", 200);
@@ -47,7 +46,6 @@ public class ParentProjectController extends BaseController<ParentProjectCreateD
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<ApiResponse<ParentProjectResponseDTO>> createParentProject(@RequestBody @Valid ParentProjectCreateDTO requestDTO) {
 
         ParentProjectResponseDTO responseDTO = parentProjectService.create(requestDTO);
@@ -62,7 +60,6 @@ public class ParentProjectController extends BaseController<ParentProjectCreateD
     }
 
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<ApiResponse<ParentProjectResponseDTO>> updateParentProject(@PathVariable UUID id,@RequestBody @Valid ParentProjectUpdateDTO requestDTO) {
 
         ParentProjectResponseDTO responseDTO = parentProjectService.update(id,requestDTO);
@@ -71,7 +68,6 @@ public class ParentProjectController extends BaseController<ParentProjectCreateD
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
     public ResponseEntity<ApiResponse<Boolean>> deleteParentProject(@PathVariable UUID id) {
         boolean responseDTO = parentProjectService.deleteById(id);
         ApiResponse<Boolean> response = new ApiResponse<>(responseDTO, "Deleted Parent Project", 200);

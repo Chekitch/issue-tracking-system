@@ -6,39 +6,44 @@ import {ParentProjectAPI, type ParentProject} from "../../services/projectServic
 import ParentProjectCard from "../ProjectCard";
 import CreateParentProjectModal from "../CreateProject";
 import EditParentProjectModal from "../EditProject";
+import { ErrorDisplay, LoadingIndicator, EmptyState } from "../../../../utils/commonFunctions";
+import { useModal } from '../../../../utils/hooks';
 
 function ParentProjectList() {
 
     const [projects, setProjects] = useState<ParentProject[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const createModal = useModal();
+    const editModal = useModal();
 
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingProject, setEditingProject] = useState<ParentProject | null>(null);
 
 
+
     useEffect(() => {
-        setLoading(true);
-        ParentProjectAPI.getAllParentProjects()
-            .then(projects => {
-                setProjects(projects);
-            })
-            .catch(error => {
-                setError(error.message || "Failed to fetch projects");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        fetchParentProjects();
     }, []);
 
+    const fetchParentProjects = async () => {
+        setLoading(true);
+        try{
+            const fetchedParentProjects = await ParentProjectAPI.getAllParentProjects();
+            setProjects(fetchedParentProjects);
+        }catch(error: any){
+            setError(error.message || "Failed to fetch projects");
+        }finally{
+            setLoading(false);
+        }
+    }
+
     const handleCreateProject = () => {
-        setIsCreateModalOpen(true);
+        createModal.openModal();
     };
 
     const handleEditProject = (id: string, projectName: string, description: string)  => {
         setEditingProject({ id, projectName, description });
-        setIsEditModalOpen(true);
+        editModal.openModal();
     };
 
     const handleProjectCreated = (id: string, projectName: string, description: string)  => {
@@ -64,38 +69,31 @@ function ParentProjectList() {
 
 
     if (loading && projects.length === 0) {
-        return (
-            <Box className="loading-container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <CircularProgress sx={{ color: '#4ECDC4' }} size={60} />
-            </Box>
-        );
+        return <LoadingIndicator />;
     }
 
-
     if (error && projects.length === 0) {
-        return <div className='error'>{error}</div>;
+        return <ErrorDisplay error={error} />;
     }
     
 
     return (
-        <div className='projects-container'>
-            <h2>Parent Projects</h2>
+        <div className='proj-container'>
+            <h2 className='proj-title'>Parent Projects</h2>
 
             <div className='header-container'>
                 <Button variant="contained" 
                     startIcon={<AddIcon />}
                     onClick={handleCreateProject}
-                    id='create-parent-project-btn'>
+                    className='proj-create-btn'>
                     New Project
                 </Button>
             </div>
             
             {projects.length === 0 ? (
-                <div className="no-projects">
-                    <p>No parent projects found</p>
-                </div>
+                <EmptyState message="No parent projects found" />
             ) : (
-                <div className='projects'>
+                <div className='proj-list'>
                     {projects.map(project => (
                         <ParentProjectCard
                             key={project.id}
@@ -108,11 +106,11 @@ function ParentProjectList() {
                 </div>
             )}
 
-            <CreateParentProjectModal open={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} onProjectCreated={handleProjectCreated}/>
+            <CreateParentProjectModal open={createModal.open} onClose={createModal.closeModal} onProjectCreated={handleProjectCreated}/>
 
             {editingProject && <EditParentProjectModal
-                                open={isEditModalOpen}
-                                onClose={() => setIsEditModalOpen(false)}
+                                open={editModal.open}
+                                onClose={editModal.closeModal}
                                 projectId={editingProject.id}
                                 currentName={editingProject.projectName}
                                 currentDescription={editingProject.description}

@@ -42,9 +42,41 @@ export const PERMISSIONS = {
     CREATE: () => `/permissions`,
     UPDATE: (id: number) => `/permissions/${id}`,
     DELETE: (id: number) => `/permissions/${id}`,
-    ASSIGN_TO_ROLE: (permissionId: number, roleId: number) => 
-        `/roles/${roleId}/permissions/${permissionId}`,
-    REMOVE_FROM_ROLE: (permissionId: number, roleId: number) => 
-        `/roles/${roleId}/permissions/${permissionId}`,
+    ASSIGN_TO_ROLE: (permissionId: number, roleId: number) => `/roles/${roleId}/permissions/${permissionId}`,
+    REMOVE_FROM_ROLE: (permissionId: number, roleId: number) => `/roles/${roleId}/permissions/${permissionId}`,
     BY_ROLE: (roleId: number) => `/roles/${roleId}/permissions`
 }
+
+
+export const ISSUE_PRIORITIES = {
+  ALL: () => `/issue-priorities`,
+  BY_ID: (id: number) => `/issue-priorities/${id}`,
+  CREATE: () => `/issue-priorities`,
+  UPDATE: (id: number) => `/issue-priorities/${id}`,
+  DELETE: (id: number) => `/issue-priorities/${id}`,
+};
+
+export const ISSUE_TYPES = {
+  ALL: () => `/issue-types`,
+  BY_ID: (id: number) => `/issue-types/${id}`,
+  CREATE: () => `/issue-types`,
+  UPDATE: (id: number) => `/issue-types/${id}`,
+  DELETE: (id: number) => `/issue-types/${id}`,
+};
+
+export const ISSUE_STATUSES = {
+  ALL: () => `/issue-statuses`,
+  BY_ID: (id: number) => `/issue-statuses/${id}`,
+  CREATE: () => `/issue-statuses`,
+  UPDATE: (id: number) => `/issue-statuses/${id}`,
+  DELETE: (id: number) => `/issue-statuses/${id}`,
+}
+
+export const ISSUES = {
+  BY_SUBPROJECT: (subprojectId: string) => `/sub-projects/${subprojectId}/issues`,
+  CREATE_ISSUE: (subprojectId: string) => `/sub-projects/${subprojectId}/issues`,
+  GET_ISSUE: (issueId: string) => `/issues/${issueId}`,
+  UPDATE_ISSUE: (issueId: string) => `/issues/${issueId}`,
+  DELETE_ISSUE: (issueId: string) => `/issues/${issueId}`,
+  ISSUE_ACTIVITIES: (issueId: string) => `/issues/${issueId}/activities`
+};

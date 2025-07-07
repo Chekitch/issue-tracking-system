@@ -40,7 +40,7 @@ public class SubProjectServiceImpl implements SubProjectService {
     @Transactional(readOnly = true)
     public SubProjectResponseDTO findById(UUID id) {
         SubProject subProject = subProjectRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("There is no subproject with that id")
+                () -> new ResourceNotFoundException("Subproject not found")
         );
 
         return subProjectMapper.toDto(subProject);
@@ -50,7 +50,7 @@ public class SubProjectServiceImpl implements SubProjectService {
     public List<SubProjectResponseDTO> findByParentProjectId(UUID parentId) {
 
         if(!parentProjectRepository.existsById(parentId)){
-            throw new ResourceNotFoundException("There is no parent project with that id");
+            throw new ResourceNotFoundException("Parent project not found");
         }
 
         List<SubProject> subProjects = subProjectRepository.findAllByParentProjectIdOrderByCreationDateAsc(parentId);
@@ -67,8 +67,8 @@ public class SubProjectServiceImpl implements SubProjectService {
     @Transactional
     public SubProjectResponseDTO createUnderParent(SubProjectCreateDTO subProjectRequest, UUID parentId) {
 
-        if(!parentProjectRepository.existsById(parentId)) throw new ResourceNotFoundException("There is no such parent project");
-        if(!userRepository.existsById(subProjectRequest.createdById())) throw new ResourceNotFoundException("There is no such user");
+        if(!parentProjectRepository.existsById(parentId)) throw new ResourceNotFoundException("Parent project not found");
+        if(!userRepository.existsById(subProjectRequest.createdById())) throw new ResourceNotFoundException("User not found");
 
         SubProject subProject = subProjectMapper.toEntity(subProjectRequest, parentId);
 
@@ -87,7 +87,7 @@ public class SubProjectServiceImpl implements SubProjectService {
     @Transactional
     public SubProjectResponseDTO update(UUID id, SubProjectUpdateDTO subProjectUpdateDTO) {
         SubProject subProject = subProjectRepository.findById(id)
-                .orElseThrow( () -> new ResourceNotFoundException("Subproject Not Found"));
+                .orElseThrow( () -> new ResourceNotFoundException("Subproject not found"));
 
         subProject.setProjectName(subProjectUpdateDTO.projectName());
         subProject.setDescription(subProjectUpdateDTO.description());

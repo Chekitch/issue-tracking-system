@@ -15,7 +15,6 @@ import {
 import type { UserRole } from '../../services/roleService';
 import { PermissionAPI, type Permission } from '../../../permissions/services/permissionService';
 import PermissionItem from '../PermissionItem';
-import "./styles.css";
 
 interface Props {
   open: boolean;
@@ -77,8 +76,7 @@ const RolePermissions = ({ open, onClose, role, onRoleUpdated }: Props) => {
         await PermissionAPI.assignPermissionToRole(permission.id, role.id);
         setRolePermissions(prev => [...prev, permission]);
       }
-      
-      // onRoleUpdated({ ...role });
+  
     } catch (err: any) {
       setError(err.message || 'Failed to update permissions');
     } finally {

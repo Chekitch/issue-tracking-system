@@ -18,13 +18,15 @@ import {
 import CreateRoleModal from "../CreateRole";
 import EditRoleModal from "../EditRole";
 import RolePermissions from "../RolePermissions";
+import { ErrorDisplay, LoadingIndicator, EmptyState } from "../../../../utils/commonFunctions";
+import { useModal } from '../../../../utils/hooks';
 
 function RoleList() {
   const [roles, setRoles] = useState<UserRole[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const createModal = useModal();
+  const editModal = useModal();
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
 
   const [isPermissionsModalOpen, setIsPermissionsModalOpen] = useState(false);
@@ -47,7 +49,7 @@ function RoleList() {
   };
 
   const handleCreateRole = () => {
-    setIsCreateModalOpen(true);
+    createModal.openModal();
   };
 
   const handleRoleCreated = (role: UserRole) => {
@@ -56,13 +58,12 @@ function RoleList() {
 
   const handleEditRole = (role: UserRole) => {
     setSelectedRole(role);
-    setIsEditModalOpen(true);
+    editModal.openModal();
   };
 
   const handleManagePermissions = (role: UserRole) => {
     setPermissionsRole(role);
     setIsPermissionsModalOpen(true);
-
   }
 
   const handleRoleUpdated = (updated: UserRole) => {
@@ -76,29 +77,25 @@ function RoleList() {
   };
 
   if (loading && roles.length === 0) {
-    return (
-      <Box className="loading-container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress sx={{ color: '#4ECDC4' }} size={60} />
-      </Box>
-    );
+    return <LoadingIndicator/>;
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return <ErrorDisplay error={error}/>;
   }
 
   return (
-    <div className="roles-container">
-      <Typography variant="h4" component="h1" className="page-title">
+    <div className="role-container">
+      <Typography variant="h4" component="h1" className="role-title">
         Role Management
       </Typography>
 
-      <div className="header-container">
+      <div className="role-header-container">
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={handleCreateRole}
-          className="create-role-btn"
+          className="role-create-btn"
         >
           Add New Role
         </Button>
@@ -108,31 +105,31 @@ function RoleList() {
         <Table sx={{ minWidth: 650 }} aria-label="roles table">
           <TableHead>
             <TableRow>
-              <TableCell>Role Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell className="role-table-header">Role Name</TableCell>
+              <TableCell className="role-table-header">Description</TableCell>
+              <TableCell className="role-table-header" align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {roles.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={3} align="center">No roles found</TableCell>
+                <TableCell className="role-table-cell" colSpan={3} align="center"><EmptyState message="No roles found" /></TableCell>
               </TableRow>
             ) : (
               roles.map((role) => (
                 <TableRow key={role.id}>
-                  <TableCell>{role.role}</TableCell>
-                  <TableCell>{role.description}</TableCell>
-                  <TableCell align="right">
+                  <TableCell className="role-table-cell">{role.role}</TableCell>
+                  <TableCell className="role-table-cell">{role.description}</TableCell>
+                  <TableCell className="role-table-cell" align="right">
                     <Button
                       size="small"
-                      className="edit-btn"
+                      className="role-edit-btn"
                       onClick={() => handleEditRole(role)}
                     >Edit
                     </Button>
                     <Button 
                       size="small" 
-                      className="manage-permissions-btn" 
+                      className="role-permissions-btn" 
                       onClick={() => handleManagePermissions(role)}
                     > Permissions
                     </Button>
@@ -145,15 +142,15 @@ function RoleList() {
       </TableContainer>
 
       <CreateRoleModal
-        open={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        open={createModal.open}
+        onClose={createModal.closeModal}
         onRoleCreated={handleRoleCreated}
       />
 
       {selectedRole && (
         <EditRoleModal
-          open={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
+          open={editModal.open}
+          onClose={editModal.closeModal}
           role={selectedRole}
           onRoleUpdated={handleRoleUpdated}
           onRoleDeleted={handleRoleDeleted}

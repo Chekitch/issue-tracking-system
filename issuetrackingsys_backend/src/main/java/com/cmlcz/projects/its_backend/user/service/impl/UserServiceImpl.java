@@ -43,22 +43,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserSummaryDTO getUserById(UUID id) {
         User user = loadUserOrFail(id);
 
         return userMapper.toDTO(user);
     }
 
-    @Transactional
     public UserSummaryDTO create(CreateUserDTO userRequestDTO) {
 
         if(!userRoleRepository.existsById(userRequestDTO.roleId())){
-            throw new ResourceNotFoundException("There is no role with that id ");
+            throw new ResourceNotFoundException("Role not found");
         }
 
-        if(userRepository.existsByUsername(userRequestDTO.username())){
-            throw new ResourceAlreadyExistsException("This username is already used");
+        if(userRepository.existsByUsernameIgnoreCase(userRequestDTO.username())){
+            throw new ResourceAlreadyExistsException("Username is already used");
         }
 
         User user = userMapper.toEntity(userRequestDTO, userRoleRepository, passwordEncoder);
@@ -70,7 +68,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<UserSummaryDTO> getAllUsers() {
         List<User> users = userRepository.findAllWithRolesByOrderByCreationDateAsc();
 
@@ -79,10 +76,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserSummaryDTO updateUser(UUID id, UpdateUserDTO updateUserDTO) {
-        if(! userRepository.getReferenceById(id).getUsername().equals(updateUserDTO.username())
-                && userRepository.existsByUsername(updateUserDTO.username()) ){
+        if(! userRepository.getReferenceById(id).getUsername().equalsIgnoreCase(updateUserDTO.username())
+                && userRepository.existsByUsernameIgnoreCase(updateUserDTO.username()) ){
             throw new ResourceAlreadyExistsException("Username is already used");
         }
 
@@ -94,7 +90,7 @@ public class UserServiceImpl implements UserService {
             user.setHashedPassword(hashedPassword);
         }
         UserRole userRole = userRoleRepository.findWithPermissionsById(updateUserDTO.roleId()).orElseThrow(
-                () -> new ResourceNotFoundException("There is no that role")
+                () -> new ResourceNotFoundException("Role not found")
         );
 
         user.setRole(userRole);
@@ -107,7 +103,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void deleteUser(UUID id) {
         User user = loadUserOrFail(id);
 

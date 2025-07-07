@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { RoleAPI, type UserRole } from '../../services/roleService';
 
-interface CreateRoleModalProps {
+interface Props {
   open: boolean;
   onClose: () => void;
   onRoleCreated: (role: UserRole) => void;
@@ -23,7 +23,7 @@ const INITIAL_FORM = {
   description: ''
 };
 
-const CreateRoleModal = ({ open, onClose, onRoleCreated } : CreateRoleModalProps) => {
+const CreateRoleModal = ({ open, onClose, onRoleCreated } : Props) => {
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);

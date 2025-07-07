@@ -8,9 +8,7 @@ import com.cmlcz.projects.its_backend.parentproject.mapper.ParentProjectMapper;
 import com.cmlcz.projects.its_backend.parentproject.model.ParentProject;
 import com.cmlcz.projects.its_backend.parentproject.repository.ParentProjectRepository;
 import com.cmlcz.projects.its_backend.parentproject.service.ParentProjectService;
-import com.cmlcz.projects.its_backend.user.model.User;
 import com.cmlcz.projects.its_backend.user.repository.UserRepository;
-import org.hibernate.annotations.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class ParentProjectServiceImpl implements ParentProjectService {
 
 
@@ -34,7 +33,7 @@ public class ParentProjectServiceImpl implements ParentProjectService {
         this.parentProjectMapper = parentProjectMapper;
     }
 
-    @Transactional
+    @Override
     public ArrayList<ParentProjectResponseDTO> findAll() {
 
 
@@ -47,7 +46,7 @@ public class ParentProjectServiceImpl implements ParentProjectService {
         return parentProjectResponseDTOList;
     }
 
-    @Transactional
+    @Override
     public ParentProjectResponseDTO findById(UUID uuid) {
 
         ParentProject parentProject = parentProjectRepository.findById(uuid).orElseThrow(
@@ -58,10 +57,9 @@ public class ParentProjectServiceImpl implements ParentProjectService {
     }
 
     @Override
-    @Transactional
     public ParentProjectResponseDTO update(UUID uuid, ParentProjectUpdateDTO parentProjectUpdateRequestDTO) {
         ParentProject parentProject = parentProjectRepository.findById(uuid).orElseThrow(
-                () -> new ResourceNotFoundException("There is no parent project with that id")
+                () -> new ResourceNotFoundException("Parent project not found")
         );
 
         parentProject.setProjectName(parentProjectUpdateRequestDTO.projectName());
@@ -73,11 +71,11 @@ public class ParentProjectServiceImpl implements ParentProjectService {
 
     }
 
-    @Transactional
+    @Override
     public ParentProjectResponseDTO create(ParentProjectCreateDTO parentProjectCreateRequestDTO) {
 
         if(!userRepository.existsById(parentProjectCreateRequestDTO.createdById()))
-            throw new ResourceNotFoundException("There is no such user");
+            throw new ResourceNotFoundException("User not found");
 
         ParentProject parentProject = parentProjectMapper.toEntity(parentProjectCreateRequestDTO);
         parentProjectRepository.save(parentProject);
@@ -85,8 +83,7 @@ public class ParentProjectServiceImpl implements ParentProjectService {
         return parentProjectMapper.toDto(parentProject);
     }
 
-
-    @Transactional
+    @Override
     public boolean deleteById(UUID uuid) {
         ParentProject project = parentProjectRepository.findById(uuid).orElseThrow(
                 () -> new ResourceNotFoundException("Parent project not found")

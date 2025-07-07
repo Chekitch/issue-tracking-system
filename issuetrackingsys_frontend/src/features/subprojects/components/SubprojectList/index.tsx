@@ -8,6 +8,8 @@ import { SubProjectAPI, type Subproject } from '../../services/SubProjectAPI';
 import CreateSubProjectModal from '../CreateSubproject';
 import AddIcon from '@mui/icons-material/Add';
 import EditParentProjectModal from '../EditSubproject';
+import { ErrorDisplay, LoadingIndicator, EmptyState } from '../../../../utils/commonFunctions';
+import { useModal } from '../../../../utils/hooks';
 
 
 function SubprojectPage() {
@@ -19,8 +21,9 @@ function SubprojectPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const createModal = useModal();
+  const editModal = useModal();
+
   const [editingProject, setEditingProject] = useState<ParentProject | null>(null);
 
   const fetchData = async () => {
@@ -51,12 +54,12 @@ function SubprojectPage() {
 
 
   const handleCreateSubproject = () => {
-    setIsCreateModalOpen(true);
+    createModal.openModal();
   }
 
   const handleEditProject = (id: string, projectName: string, description: string) => {
     setEditingProject({id, projectName, description});
-    setIsEditModalOpen(true);
+    editModal.openModal();
   }
 
 
@@ -79,20 +82,12 @@ function SubprojectPage() {
 
 
   if (loading && subprojects.length === 0) {
-    return (
-      <Box className="loading-container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress sx={{ color: '#4ECDC4' }} size={60} />
-      </Box>
-    );
-  }else if (error && subprojects.length === 0) {
-    return (
-      <div className="error-container">
-        <div className="error">{error}</div>
-      </div>
-    );
+    return <LoadingIndicator />;
   }
 
-
+  if (error && subprojects.length === 0) {
+    return <ErrorDisplay error={error} />;
+  }
   return (
     <div className="subprojects-container">
 
@@ -113,9 +108,7 @@ function SubprojectPage() {
       <div className="subprojects-section">
         <h2>Subprojects</h2>
         {subprojects.length === 0 ? (
-          <div className="no-subprojects">
-            <p>No subprojects found for this project</p>
-          </div>
+          <EmptyState message="No subprojects found for this project" />
         ) : (
           <div className="subprojects">
             {subprojects.map(sp => (
@@ -133,16 +126,16 @@ function SubprojectPage() {
     
         {projectId && (
 
-          <CreateSubProjectModal open={isCreateModalOpen}
-                               onClose={() => setIsCreateModalOpen(false)}
+          <CreateSubProjectModal open={createModal.open}
+                               onClose={createModal.closeModal}
                                onSubprojectCreated={handleSubprojectCreated}
                                parentId={projectId} />
           )
         }
 
         {editingProject && <EditParentProjectModal
-                            open={isEditModalOpen}
-                            onClose={() => setIsEditModalOpen(false)}
+                            open={editModal.open}
+                            onClose={editModal.closeModal}
                           projectId={editingProject.id}
                           currentName={editingProject.projectName}
                           currentDescription={editingProject.description}

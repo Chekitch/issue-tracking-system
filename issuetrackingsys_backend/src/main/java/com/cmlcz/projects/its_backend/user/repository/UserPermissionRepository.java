@@ -13,5 +13,5 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
     Optional<UserPermission> findByName(String name);
     List<UserPermission> findAllByOrderByCreationDateAsc();
 
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 }

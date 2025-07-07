@@ -32,7 +32,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     @Override
     public UserPermissionDTO createPermission(CreateUserPermissionDTO userPermissionRequest) {
 
-        if(userPermissionRepository.existsByName(userPermissionRequest.name())){
+        if(userPermissionRepository.existsByNameIgnoreCase(userPermissionRequest.name())){
             throw new ResourceAlreadyExistsException("Permission already exists");
         }
 
@@ -65,8 +65,8 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     public UserPermissionDTO update(UpdateUserPermissionDTO updateUserPermissionDTO, Long id) {
         UserPermission userPermission = getPermissionOrFail(id);
 
-        if(userPermissionRepository.existsByName(updateUserPermissionDTO.name())){
-            throw new ResourceAlreadyExistsException("Permission name is already used");
+        if(!userPermission.getName().equalsIgnoreCase(updateUserPermissionDTO.name()) && userPermissionRepository.existsByNameIgnoreCase(updateUserPermissionDTO.name())){
+            throw new ResourceAlreadyExistsException("Permission already exists");
         }
         userPermission.setName(updateUserPermissionDTO.name());
         userPermission.setDescription(updateUserPermissionDTO.description());

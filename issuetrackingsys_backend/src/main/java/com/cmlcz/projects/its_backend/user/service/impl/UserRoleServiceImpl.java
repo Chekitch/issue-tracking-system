@@ -41,7 +41,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public UserRoleDTO create(CreateUserRoleDTO requestDTO) {
-        if(userRoleRepository.existsByRole(requestDTO.role())){
+        if(userRoleRepository.existsByRoleIgnoreCase(requestDTO.role())){
             throw new ResourceAlreadyExistsException("This role already exists");
         }
 
@@ -104,7 +104,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
         UserRole userRole = loadRoleOrException(roleId);
 
-        if(userRoleRepository.existsByRole(updateUserRoleDTO.role())){
+        if(!userRole.getRole().equalsIgnoreCase(updateUserRoleDTO.role()) && userRoleRepository.existsByRoleIgnoreCase(updateUserRoleDTO.role())){
             throw new ResourceAlreadyExistsException("This role already exists");
         }
 
@@ -118,7 +118,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     public UserRole loadRoleOrException(Long id){
         return userRoleRepository.findWithPermissionsById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
     }
 
     public UserRole loadBaseRole(){

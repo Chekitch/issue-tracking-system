@@ -17,13 +17,15 @@ import {
 } from "@mui/material";
 import CreatePermissionModal from "../CreatePermission";
 import EditPermissionModal from "../EditPermission";
+import { ErrorDisplay, LoadingIndicator, EmptyState } from "../../../../utils/commonFunctions";
+import { useModal } from '../../../../utils/hooks';
 
 function PermissionList() {
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const createModal = useModal();
+  const editModal = useModal();
   const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null);
 
   useEffect(() => {
@@ -43,7 +45,7 @@ function PermissionList() {
   };
 
   const handleCreatePermission = () => {
-    setIsCreateModalOpen(true);
+    createModal.openModal();
   };
 
   const handlePermissionCreated = (permission: Permission) => {
@@ -52,7 +54,7 @@ function PermissionList() {
 
   const handleEditPermission = (permission: Permission) => {
     setSelectedPermission(permission);
-    setIsEditModalOpen(true);
+    editModal.openModal();
   };
 
   const handlePermissionUpdated = (updated: Permission) => {
@@ -70,55 +72,51 @@ function PermissionList() {
   };
 
   if (loading && permissions.length === 0) {
-    return (
-      <Box className="loading-container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress sx={{ color: '#4ECDC4' }} size={60} />
-      </Box>
-    );
+    return <LoadingIndicator />;
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return <ErrorDisplay error={error} />;
   }
 
   return (
-    <div className="permissions-container">
-      <Typography variant="h4" component="h1" className="page-title">
+    <div className="perm-container">
+      <Typography variant="h4" component="h1" className="perm-title">
         Permission Management
       </Typography>
 
-      <div className="header-container">
+      <div className="perm-header-container">
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={handleCreatePermission}
-          className="create-permission-btn"
+          className="perm-create-btn"
         >
           Add New Permission
         </Button>
       </div>
 
-      <TableContainer component={Paper} className="permission-table-container">
+      <TableContainer component={Paper} className="perm-table-container">
         <Table sx={{ minWidth: 650 }} aria-label="permissions table">
           <TableHead>
             <TableRow>
-              <TableCell>Permission Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell className="perm-table-header">Permission Name</TableCell>
+              <TableCell className="perm-table-header">Description</TableCell>
+              <TableCell className="perm-table-header" align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {permissions.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={3} align="center">No permissions found</TableCell>
+                <TableCell className="perm-table-cell" colSpan={3} align="center"><EmptyState message="No permissions found" /></TableCell>
               </TableRow>
             ) : (
               permissions.map((permission) => (
                 <TableRow key={permission.id}>
-                  <TableCell>{permission.name}</TableCell>
-                  <TableCell>{permission.description}</TableCell>
-                  <TableCell align="right">
-                    <Button size="small" className="edit-btn" onClick={() => handleEditPermission(permission)}>
+                  <TableCell className="perm-table-cell">{permission.name}</TableCell>
+                  <TableCell className="perm-table-cell">{permission.description}</TableCell>
+                  <TableCell className="perm-table-cell" align="right">
+                    <Button size="small" className="perm-edit-btn" onClick={() => handleEditPermission(permission)}>
                       Edit
                     </Button>
                   </TableCell>
@@ -130,15 +128,15 @@ function PermissionList() {
       </TableContainer>
 
       <CreatePermissionModal
-        open={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        open={createModal.open}
+        onClose={createModal.closeModal}
         onPermissionCreated={handlePermissionCreated}
       />
 
       {selectedPermission && (
         <EditPermissionModal
-          open={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
+          open={editModal.open}
+          onClose={editModal.closeModal}
           permission={selectedPermission}
           onPermissionUpdated={handlePermissionUpdated}
           onPermissionDeleted={handlePermissionDeleted}

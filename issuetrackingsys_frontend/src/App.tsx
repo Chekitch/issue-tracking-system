@@ -1,5 +1,3 @@
-
-import './App.css'
 import { Routes, Route } from 'react-router-dom'
 import ProtectedRoutes from './utils/ProtectedRoutes'
 import Login from './core/auth/components/Login/index.tsx'
@@ -13,6 +11,10 @@ import ParentProjectList from './features/projects/components/ProjectList/index.
 import UserList from './features/user/components/UserList/index.tsx'
 import RoleList from './features/roles/components/RoleList/index.tsx'
 import PermissionList from './features/permissions/components/PermissionList/index.tsx'
+import IssueList from './features/issues/components/IssueList/index.tsx'
+import IssuePriorityList from './features/issuePriorities/components/IssuePriorityList/index.tsx'
+import IssueTypeList from './features/issueTypes/components/IssueTypeList/index.tsx'
+import IssueStatusList from './features/issueStatus/components/IssueStatusList/index.tsx'
 
 function App() {
 
@@ -29,9 +31,13 @@ function App() {
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/projects' element={<ParentProjectList />} />
             <Route path='/projects/:projectId/subprojects' element={<SubprojectPage />} />
+            <Route path='/subprojects/:projectId/issues' element={<IssueList />} />
             <Route path='/users' element={<UserList />} />
             <Route path='/roles' element={<RoleList />} />
             <Route path='/permissions' element={<PermissionList />} />
+            <Route path='/issue-priorities' element={<IssuePriorityList />} />
+            <Route path='/issue-types' element={<IssueTypeList />} />
+            <Route path='/issue-statuses' element={<IssueStatusList />} />
             <Route path='*' element={<NotFound/>} />
           </Route>
         </Route>
