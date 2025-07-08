@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { 
   Box, 
   Paper, 
@@ -9,7 +9,7 @@ import {
   InputBase,
   Button
 } from "@mui/material";
-import { IssueAPI, type Issue } from "../../services/IssueAPI";
+import { IssueAPI, type Issue } from "../../services/issueService";
 import CreateIssueModal from "../CreateIssue";
 import {Search as SearchIcon} from "@mui/icons-material";
 import {Add as AddIcon } from "@mui/icons-material";
@@ -38,7 +38,7 @@ const IssueList = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const createModal = useModal();
     const editModal = useModal();
-    const viewModal = useModal();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -77,7 +77,7 @@ const IssueList = () => {
     };
 
     const handleIssueCreated = (issue: Issue) => {
-        setIssues(prev => [...prev, issue]);
+        setIssues(prev => [issue,...prev]);
     };
 
     const handleIssueUpdated = (updatedIssue: Issue) => {
@@ -91,11 +91,7 @@ const IssueList = () => {
     };
 
     const handleIssueClick = (issueId: string) => {
-        const issue = issues.find(i => i.id === issueId);
-        if(issue){
-            setCurrentIssue(issue);
-            viewModal.openModal();
-        }
+       navigate(`/subprojects/${subprojectId}/issues/${issueId}`);
     }
     const handleIssueMoreClick = (event: React.MouseEvent, issueId: string) => {
     const issue = issues.find(i => i.id === issueId);
@@ -262,6 +258,7 @@ const IssueList = () => {
                     users={users}
                 />
                 )}
+
         </Box>
     );
 };

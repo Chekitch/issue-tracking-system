@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
             throw new ResourceNotFoundException("Issue not found");
         }
 
-        List<Comment> comments = commentRepository.getCommentsByIssueId(issueId);
+        List<Comment> comments = commentRepository.getCommentsByIssueIdOrderByCreationDateDesc(issueId);
 
         return comments.stream()
                 .map(commentMapper::toDto)

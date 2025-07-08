@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    List<Comment> getCommentsByIssueId(UUID issueId);
+    List<Comment> getCommentsByIssueIdOrderByCreationDateDesc(UUID issueId);
 }

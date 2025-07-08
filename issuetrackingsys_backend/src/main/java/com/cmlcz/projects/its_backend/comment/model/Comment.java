@@ -5,6 +5,8 @@ import com.cmlcz.projects.its_backend.issue.model.Issue;
 import com.cmlcz.projects.its_backend.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -17,6 +19,7 @@ public class Comment extends BaseModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="issue_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Issue issue;
 
     @ManyToOne(fetch=FetchType.LAZY)

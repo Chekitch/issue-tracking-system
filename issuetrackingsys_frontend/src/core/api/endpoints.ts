@@ -77,6 +77,13 @@ export const ISSUES = {
   CREATE_ISSUE: (subprojectId: string) => `/sub-projects/${subprojectId}/issues`,
   GET_ISSUE: (issueId: string) => `/issues/${issueId}`,
   UPDATE_ISSUE: (issueId: string) => `/issues/${issueId}`,
-  DELETE_ISSUE: (issueId: string) => `/issues/${issueId}`,
-  ISSUE_ACTIVITIES: (issueId: string) => `/issues/${issueId}/activities`
+  DELETE_ISSUE: (issueId: string) => `/issues/${issueId}`
 };
+
+export const COMMENTS = {
+  BY_ISSUE : (issueId: string) => `/issues/${issueId}/comments`,
+  CREATE_COMMENT : (issueId: string) => `/issues/${issueId}/comments`,
+  GET_COMMENT : (issueId: string, commentId: number) => `/issues/${issueId}/comments/${commentId}`,
+  UPDATE_COMMENT : (issueId: string, commentId: number) => `/issues/${issueId}/comments/${commentId}`,
+  DELETE_COMMENT : (issueId: string, commentId: number) => `/issues/${issueId}/comments/${commentId}`
+}

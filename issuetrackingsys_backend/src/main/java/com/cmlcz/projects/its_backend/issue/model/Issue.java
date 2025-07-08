@@ -23,6 +23,8 @@ import java.util.UUID;
 public class Issue extends BaseUuidModel {
 
     private String title;
+
+    @Column(length = 1000)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

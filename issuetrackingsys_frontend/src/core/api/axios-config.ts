@@ -39,9 +39,7 @@ axiosInstance.interceptors.response.use(
     (response) => {
         const wrapper = response.data as ApiResponse<any> | ErrorResponse;
     
-        console.log(wrapper);
         if ('data' in wrapper){
-            console.log(wrapper.data);
             return wrapper.data;
         }else{
             return Promise.reject(new Error(wrapper.message));

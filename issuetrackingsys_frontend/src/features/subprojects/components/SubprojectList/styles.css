@@ -13,6 +13,7 @@
 
 .parent-project-info {
   margin-bottom: 2rem;
+  word-break: break-word;
 }
 
 .parent-project-info h1 {

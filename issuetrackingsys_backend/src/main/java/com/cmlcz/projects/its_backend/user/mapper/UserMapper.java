@@ -1,36 +1,37 @@
 package com.cmlcz.projects.its_backend.user.mapper;
 
 import com.cmlcz.projects.its_backend.common.exception.ResourceNotFoundException;
+import com.cmlcz.projects.its_backend.user.dto.user.CommentUserDTO;
 import com.cmlcz.projects.its_backend.user.dto.user.CreateUserDTO;
 import com.cmlcz.projects.its_backend.user.dto.user.UpdateUserDTO;
 import com.cmlcz.projects.its_backend.user.model.User;
 import com.cmlcz.projects.its_backend.user.dto.user.UserSummaryDTO;
 import com.cmlcz.projects.its_backend.user.model.UserRole;
 import com.cmlcz.projects.its_backend.user.repository.UserRoleRepository;
+import com.fasterxml.jackson.datatype.jsr310.ser.YearSerializer;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring", uses = {UserRoleMapper.class})
 public interface UserMapper {
 
 
     UserSummaryDTO toDTO(User user);
-    List<UserSummaryDTO> toDTOs(List<User> users);
+    CommentUserDTO toCommentDTO(User user);
 
     @Mapping(source = "roleId", target = "role", qualifiedByName = "mapRole")
     @Mapping(target = "hashedPassword", source = "password", qualifiedByName = "encodePassword")
     User toEntity(CreateUserDTO createUserDTO, @Context UserRoleRepository userRoleRepository,
-                  @Context PasswordEncoder passwordEncoder);
+                         @Context PasswordEncoder passwordEncoder);
 
     @Mapping(source = "roleId", target = "role", qualifiedByName = "mapRole")
     @Mapping(target = "hashedPassword", source = "password", qualifiedByName = "encodePassword")
     User toEntity(UpdateUserDTO updateUserDTO, @Context UserRoleRepository userRoleRepository,
                   @Context PasswordEncoder passwordEncoder);
+
 
 
 

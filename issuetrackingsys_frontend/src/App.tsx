@@ -15,11 +15,13 @@ import IssueList from './features/issues/components/IssueList/index.tsx'
 import IssuePriorityList from './features/issuePriorities/components/IssuePriorityList/index.tsx'
 import IssueTypeList from './features/issueTypes/components/IssueTypeList/index.tsx'
 import IssueStatusList from './features/issueStatus/components/IssueStatusList/index.tsx'
+import IssueDetailsPage from './features/issues/components/IssueDetailsPage/index.tsx'
 
 function App() {
 
   const token = useAppSelector((state) => state.auth.token);
   setAuthToken(token);
+
 
   return (
     <>
@@ -32,6 +34,7 @@ function App() {
             <Route path='/projects' element={<ParentProjectList />} />
             <Route path='/projects/:projectId/subprojects' element={<SubprojectPage />} />
             <Route path='/subprojects/:projectId/issues' element={<IssueList />} />
+            <Route path="/subprojects/:projectId/issues/:issueId" element={<IssueDetailsPage />} />
             <Route path='/users' element={<UserList />} />
             <Route path='/roles' element={<RoleList />} />
             <Route path='/permissions' element={<PermissionList />} />

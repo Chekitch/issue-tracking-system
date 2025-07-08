@@ -5,7 +5,7 @@ import {
   Typography, Box, CircularProgress, IconButton
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IssueAPI, type Issue } from '../../services/IssueAPI';
+import { IssueAPI, type Issue } from '../../services/issueService';
 import type { IssueStatus } from '../../../issueStatus/services/issueStatusService';
 import type { IssuePriority } from '../../../issuePriorities/services/issuePriorityService';
 import type { IssueType } from '../../../issueTypes/services/issueTypeService';
@@ -294,13 +294,10 @@ const EditIssueModal = ({ open, onClose, issue, statuses, priorities, types, use
                 displayEmpty
                 renderValue={(selected) => {
                   const selectedUser = users.find(u => u.id === selected);
-                  return selectedUser ? selectedUser.username : 'Unassigned';
+                  return selectedUser ? selectedUser.username : '';
                 }}
                 sx={styles.select}
               >
-                <MenuItem value="">
-                  <em>Unassigned</em>
-                </MenuItem>
                 {users.map((user) => (
                   <MenuItem key={user.id} value={user.id}>
                     <Typography>{user.username}</Typography>

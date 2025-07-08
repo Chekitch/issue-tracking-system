@@ -5,7 +5,7 @@ import {
   Button, Typography, Box, CircularProgress,
   FormControl, Select, MenuItem, OutlinedInput
 } from "@mui/material";
-import { IssueAPI, type Issue } from "../../services/IssueAPI";
+import { IssueAPI, type Issue } from "../../services/issueService";
 import type { IssueStatus } from "../../../issueStatus/services/issueStatusService";
 import type { IssuePriority } from "../../../issuePriorities/services/issuePriorityService";
 import type { IssueType } from "../../../issueTypes/services/issueTypeService";

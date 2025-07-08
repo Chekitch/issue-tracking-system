@@ -17,6 +17,7 @@
   margin-bottom: 1rem;
   line-height: 1.4;
   flex-grow: 1;
+  word-break: break-word;
 }
 
 .project-footer{

@@ -8,12 +8,12 @@ import {
   CardContent
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import type { Issue } from '../../services/IssueAPI';
+import type { Issue } from '../../services/issueService';
 
 interface Props {
   issue: Issue;
-  onClick?: (issueId: string) => void;
-  onMoreClick?: (event: React.MouseEvent, issueId: string) => void;
+  onClick: (issueId: string) => void;
+  onMoreClick: (event: React.MouseEvent, issueId: string) => void;
 }
 
 const IssueCard = ({ issue, onClick, onMoreClick } : Props) => {
@@ -36,7 +36,7 @@ const IssueCard = ({ issue, onClick, onMoreClick } : Props) => {
       sx={{ 
         bgcolor: 'rgba(255, 255, 255, 0.02)',
         borderRadius: 2,
-        cursor: onClick ? 'pointer' : 'default'
+        cursor: 'pointer'
       }}
     >
       <CardContent sx={{ 

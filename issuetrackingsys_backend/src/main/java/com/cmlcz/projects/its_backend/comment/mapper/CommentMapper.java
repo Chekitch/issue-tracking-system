@@ -24,8 +24,8 @@ public abstract class CommentMapper {
 
     @Autowired private IssueRepository issueRepository;
 
-    @Mapping(source = "createdBy.id", target = "authorId")
-    @Mapping(source = "createdBy.username", target = "authorUsername")
+    @Mapping(source = "createdBy.id", target = "author.id")
+    @Mapping(source = "createdBy.username", target = "author.username")
     @Mapping(source = "creationDate", target = "createdAt")
     public abstract CommentResponseDTO toDto (Comment comment);
 
