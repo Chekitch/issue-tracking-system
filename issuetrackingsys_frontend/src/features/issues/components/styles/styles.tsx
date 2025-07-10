@@ -194,5 +194,33 @@ export const stylesIssueDetailsPage = {
     textAlign: 'center', 
     bgcolor: 'rgba(255, 255, 255, 0.03)', 
     borderRadius: 1
-  }
+  },
+  attachment: {
+  borderRadius: 1,
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  backgroundColor: 'rgba(15, 23, 42, 0.7)',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 2,
+  p: 1.5,
+  mb: 1,
+  },
+
+  attachmentName: {
+    color: '#E2E8F0',
+    fontSize: '0.9rem',
+    wordBreak: 'break-all',
+  },
+  attachmentInfo: {
+    color: '#94A3B8',
+    fontSize: '0.8rem',
+  },
+  attachmentButton: {
+    color: '#94A3B8',
+    p: 0.5,
+    '&:hover': {
+      backgroundColor: 'rgba(96, 165, 250, 0.1)',
+      color: '#60A5FA',
+    }
+  },
 };

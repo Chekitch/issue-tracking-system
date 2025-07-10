@@ -20,7 +20,9 @@
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
     "react-color": "^2.19.3",
+    "react-doc-viewer": "^0.1.14",
     "react-dom": "^19.1.0",
+    "react-file-previewer": "^0.6.3",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2"
   },

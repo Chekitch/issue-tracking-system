@@ -20,20 +20,15 @@ import lombok.Setter;
 public class Attachment extends BaseModel {
 
     private String fileName;
-    private String originalFileName;
-    private String contentType;
-    private long size;
-
-
-    private String objectName;
+    private String fileType;
+    private Long fileSize;
+    private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uplaoded_by")
+    @JoinColumn(name = "uploaded_by_id")
+    @JsonIgnore
     private User uploadedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "issue_id")
-    @JsonIgnore
     private Issue issue;
-
 }

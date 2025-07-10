@@ -86,4 +86,12 @@ export const COMMENTS = {
   GET_COMMENT : (issueId: string, commentId: number) => `/issues/${issueId}/comments/${commentId}`,
   UPDATE_COMMENT : (issueId: string, commentId: number) => `/issues/${issueId}/comments/${commentId}`,
   DELETE_COMMENT : (issueId: string, commentId: number) => `/issues/${issueId}/comments/${commentId}`
-}
+};
+
+export const ATTACHMENTS = {
+  UPLOAD: (issueId: string) => `/issues/${issueId}/attachments`,
+  BY_ID: (issueId: string, attachmentId: number) => `/issues/${issueId}/attachments/${attachmentId}`,
+  DOWNLOAD: (issueId: string, attachmentId: number) => `/issues/${issueId}/attachments/${attachmentId}/download`,
+  BY_ISSUE: (issueId: string) => `/issues/${issueId}/attachments`,
+  DELETE: (issueId: string, attachmentId: number) => `/issues/${issueId}/attachments/${attachmentId}`
+};

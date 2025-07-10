@@ -5,7 +5,6 @@ import AddIcon from '@mui/icons-material/Add';
 import { 
   Box, 
   Button, 
-  CircularProgress, 
   Paper, 
   Table, 
   TableBody, 
@@ -37,8 +36,8 @@ function IssuePriorityList() {
     try {
       const fetchedPriorities = await IssuePriorityAPI.getAllIssuePriorities();
       setPriorities(fetchedPriorities);
-    } catch (error: any) {
-      setError(error.message || "Failed to fetch priorities");
+    } catch (err: any) {
+      setError(err.message || "Failed to fetch priorities");
     } finally {
       setLoading(false);
     }
