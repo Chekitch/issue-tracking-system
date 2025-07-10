@@ -485,9 +485,10 @@ const IssueDetailsPage = () => {
                         >
                           <ListItemText
                             primary={attachment.fileName}
-                            secondary={`${(attachment.fileSize / 1024).toFixed(1)} KB`}
+                            secondary={`${(attachment.fileSize / 1024).toFixed(1)} KB • Uploaded by ${attachment.uploadedByUsername || 'Unknown'}`}
+                            
                             slotProps={{
-                              primary: { sx: { color: '#E2E8F0', wordBreak: 'break-all' } },
+                              primary: { sx: { color: '#E2E8F0'} },
                               secondary: { sx: { color: '#94A3B8' } }
                             }}
                           />

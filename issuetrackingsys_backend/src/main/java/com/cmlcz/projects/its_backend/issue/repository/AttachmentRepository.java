@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface AttachmentRepository extends JpaRepository<Attachment, Long> {
-    List<Attachment> findByIssueId(UUID issueId);
+    List<Attachment> findByIssueIdOrderByCreationDateDesc(UUID issueId);
 } 

@@ -12,21 +12,22 @@ import com.cmlcz.projects.its_backend.user.model.User;
 import com.cmlcz.projects.its_backend.user.repository.UserRepository;
 import com.cmlcz.projects.its_backend.issue.repository.IssueRepository;
 import com.cmlcz.projects.its_backend.issue.model.Issue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AttachmentServiceImpl implements AttachmentService {
 
     private final AttachmentRepository attachmentRepository;
@@ -37,12 +38,21 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Value("${attachments.upload.dir:uploads}")
     private String uploadDir;
 
-    public AttachmentServiceImpl(AttachmentRepository attachmentRepository, UserRepository userRepository, 
+    @Autowired
+    public AttachmentServiceImpl(AttachmentRepository attachmentRepository, UserRepository userRepository,
                                 IssueRepository issueRepository, AttachmentMapper attachmentMapper) {
         this.attachmentRepository = attachmentRepository;
         this.userRepository = userRepository;
         this.issueRepository = issueRepository;
         this.attachmentMapper = attachmentMapper;
+    }
+
+    @Override
+    public List<AttachmentResponseDTO> getAttachmentsByIssueId(UUID issueId) {
+        List<Attachment> attachments = attachmentRepository.findByIssueIdOrderByCreationDateDesc(issueId);
+        return attachments.stream()
+                .map(attachmentMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -56,8 +66,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         MultipartFile file = requestDTO.getFile();
         String originalFileName = file.getOriginalFilename();
         String uniqueFileName = UUID.randomUUID() + "_" + originalFileName;
-        
-        // Create upload directory if it doesn't exist
+
         Path uploadPath = Paths.get(uploadDir);
         try {
             if (!Files.exists(uploadPath)) {
@@ -88,8 +97,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     public AttachmentResponseDTO getAttachmentMetadata(Long id, UUID issueId) {
         Attachment attachment = attachmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Attachment not found"));
-        
-        // Validate that the attachment belongs to the specified issue
+
         if (!attachment.getIssue().getId().equals(issueId)) {
             throw new ResourceNotFoundException("Attachment not found for the specified issue");
         }
@@ -101,8 +109,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     public DownloadedFile downloadAttachment(Long id, UUID issueId) {
         Attachment attachment = attachmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Attachment not found"));
-        
-        // Validate that the attachment belongs to the specified issue
+
         if (!attachment.getIssue().getId().equals(issueId)) {
             throw new ResourceNotFoundException("Attachment not found for the specified issue");
         }
@@ -114,13 +121,5 @@ public class AttachmentServiceImpl implements AttachmentService {
         } catch (IOException e) {
             throw new RuntimeException("File could not be read", e);
         }
-    }
-
-    @Override
-    public List<AttachmentResponseDTO> getAttachmentsByIssueId(UUID issueId) {
-        List<Attachment> attachments = attachmentRepository.findByIssueId(issueId);
-        return attachments.stream()
-                .map(attachmentMapper::toDto)
-                .collect(Collectors.toList());
     }
 } 

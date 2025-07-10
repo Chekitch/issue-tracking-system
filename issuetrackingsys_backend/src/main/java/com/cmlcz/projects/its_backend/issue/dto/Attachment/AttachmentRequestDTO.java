@@ -1,5 +1,7 @@
 package com.cmlcz.projects.its_backend.issue.dto.Attachment;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttachmentRequestDTO {
+    @NotNull
+    @NotEmpty
     private MultipartFile file;
     private UUID userId;
 } 

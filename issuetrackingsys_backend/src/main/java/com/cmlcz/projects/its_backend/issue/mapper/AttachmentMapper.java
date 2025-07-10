@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AttachmentMapper {
 
+    @Mapping(source = "uploadedBy.username", target = "uploadedByUsername")
     AttachmentResponseDTO toDto(Attachment attachment);
 
     @Mapping(target = "fileName", expression = "java(file.getOriginalFilename())")

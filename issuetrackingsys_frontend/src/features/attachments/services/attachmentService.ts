@@ -7,6 +7,7 @@ export interface AttachmentResponseDTO {
   fileType: string;
   fileSize: number;
   filePath: string;
+  uploadedByUsername: string;
 }
 
 export interface DownloadedFile {

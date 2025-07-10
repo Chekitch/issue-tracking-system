@@ -13,4 +13,5 @@ public class AttachmentResponseDTO {
     private String fileType;
     private Long fileSize;
     private String filePath;
+    private String uploadedByUsername;
 } 
